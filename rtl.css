@@ -1,0 +1,24 @@
+/**
+ * RTL adjustments.
+ *
+ * Most directional styling in this theme uses CSS logical properties
+ * (margin-inline, inset-inline-start, text-align: start, ...) so it flips
+ * automatically. Only the few remaining physical rules are corrected here.
+ *
+ * @package Moghadam
+ */
+
+body {
+	direction: rtl;
+	unicode-bidi: embed;
+}
+
+.alignleft {
+	float: right;
+	margin: 0 0 var(--moghadam-space-sm) var(--moghadam-space-md);
+}
+
+.alignright {
+	float: left;
+	margin: 0 var(--moghadam-space-md) var(--moghadam-space-sm) 0;
+}

@@ -1,0 +1,155 @@
+# Copyright (C) 2026 Sayid Moghadam
+# This file is distributed under the GNU General Public License v3 or later.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Moghadam 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/moghadam-pro/moghadam-wp-theme/issues\n"
+"POT-Creation-Date: 2026-08-24 10:50+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: moghadam\n"
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr ""
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try a search?"
+msgstr ""
+
+#: archive.php:34
+msgid "Previous"
+msgstr ""
+
+#: archive.php:35
+msgid "Next"
+msgstr ""
+
+#: comments.php:21
+msgid "%1$s comment on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s comments on &ldquo;%2$s&rdquo;"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:43
+msgid "Older comments"
+msgstr ""
+
+#: comments.php:44
+msgid "Newer comments"
+msgstr ""
+
+#: comments.php:50
+msgid "Comments are closed."
+msgstr ""
+
+#: footer.php:19
+msgid "Footer Menu"
+msgstr ""
+
+#: footer.php:37
+msgid "&copy; %1$s %2$s. All rights reserved."
+msgstr ""
+
+#: header.php:22
+msgid "Skip to content"
+msgstr ""
+
+#: header.php:52
+msgid "Primary Menu"
+msgstr ""
+
+#: header.php:55
+msgid "Menu"
+msgstr ""
+
+#: inc/customizer.php:43
+msgid "Theme Colors"
+msgstr ""
+
+#: inc/customizer.php:62
+msgid "Accent Color"
+msgstr ""
+
+#: inc/setup.php:78
+msgid "Sidebar"
+msgstr ""
+
+#: inc/setup.php:80
+msgid "Widgets added here appear in the main sidebar."
+msgstr ""
+
+#: inc/setup.php:90
+msgid "Footer"
+msgstr ""
+
+#: inc/setup.php:92
+msgid "Widgets added here appear in the site footer."
+msgstr ""
+
+#: inc/template-tags.php:56
+msgid ", "
+msgstr ""
+
+#: inc/template-tags.php:76
+msgid "Leave a comment"
+msgstr ""
+
+#: inc/template-tags.php:77
+msgid "1 Comment"
+msgstr ""
+
+#: inc/template-tags.php:78
+msgid "% Comments"
+msgstr ""
+
+#: inc/template-tags.php:84
+msgid "Edit"
+msgstr ""
+
+#: search.php:19
+msgid "Search Results for: %s"
+msgstr ""
+
+#: searchform.php:14
+msgid "Search for:"
+msgstr ""
+
+#: searchform.php:20
+msgid "Search &hellip;"
+msgstr ""
+
+#: searchform.php:24
+msgid "Search"
+msgstr ""
+
+#: single.php:21
+msgid "Previous:"
+msgstr ""
+
+#: single.php:22
+msgid "Next:"
+msgstr ""
+
+#: template-parts/content/content-none.php:12
+msgid "Nothing here"
+msgstr ""
+
+#: template-parts/content/content-none.php:17
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr ""
+
+#: template-parts/content/content-none.php:20
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""
+
+#: template-parts/content/content-page.php:23
+msgid "Pages:"
+msgstr ""
