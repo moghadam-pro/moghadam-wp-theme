@@ -106,10 +106,6 @@ Template: moghadam
 */
 ```
 
-## Translation
-
-The theme is fully internationalized under the `moghadam` text domain. `languages/moghadam.pot` is the template — copy it to `fa_IR.po`, translate, compile to `fa_IR.mo` and drop both in `languages/`.
-
 ## License
 
 Moghadam is free software, released under the GNU General Public License v3 or later. See [LICENSE](LICENSE) for the full text.
