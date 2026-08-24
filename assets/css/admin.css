@@ -1,0 +1,90 @@
+/**
+ * Moghadam - theme settings screen
+ *
+ * @package Moghadam
+ * @since   1.2.0
+ */
+
+.moghadam-settings .moghadam-group-title {
+	margin-top: 2em;
+}
+
+.moghadam-settings .description {
+	max-width: 60em;
+}
+
+.moghadam-variables-table {
+	margin-top: 1em;
+}
+
+.moghadam-variables-table th[scope="row"] {
+	width: 16em;
+	padding: 12px 10px;
+	vertical-align: top;
+}
+
+.moghadam-variables-table th[scope="row"] label {
+	display: block;
+	font-weight: 600;
+}
+
+.moghadam-variables-table th[scope="row"] code {
+	display: inline-block;
+	margin-top: 2px;
+	padding: 0;
+	background: none;
+	color: #646970;
+	font-size: 11px;
+}
+
+.moghadam-variables-table td {
+	padding: 12px 10px;
+	vertical-align: top;
+}
+
+.moghadam-variables-table .column-token {
+	width: 16em;
+}
+
+.moghadam-variables-table .column-value {
+	width: 12em;
+}
+
+.moghadam-variables-table .column-value-wide {
+	width: 32em;
+}
+
+.moghadam-variables-table .moghadam-usage {
+	color: #646970;
+}
+
+.moghadam-variables-table .moghadam-text-field,
+.moghadam-variables-table .moghadam-size-field {
+	width: 100%;
+	max-width: 32em;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 12px;
+}
+
+.moghadam-variables-table .moghadam-size-field {
+	max-width: 10em;
+}
+
+.moghadam-reset-form {
+	padding-top: 1em;
+	margin-top: 2em;
+	border-top: 1px solid #dcdcde;
+}
+
+.moghadam-footnote {
+	margin-top: 1.5em;
+}
+
+@media screen and (max-width: 782px) {
+	.moghadam-variables-table th[scope="row"],
+	.moghadam-variables-table .column-token,
+	.moghadam-variables-table .column-value,
+	.moghadam-variables-table .column-value-wide {
+		width: auto;
+	}
+}

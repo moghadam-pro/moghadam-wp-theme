@@ -2,6 +2,11 @@
 /**
  * Customizer additions.
  *
+ * Colour and typography are not configured here. They live in the theme's own
+ * Variables screen, which is the single source of truth for every design token
+ * (see the readme). What remains here is the live preview for the site title
+ * and tagline, which belong to WordPress rather than to the theme.
+ *
  * @package Moghadam
  */
 
@@ -36,53 +41,8 @@ function moghadam_customize_register( $wp_customize ) {
 			},
 		)
 	);
-
-	$wp_customize->add_section(
-		'moghadam_colors',
-		array(
-			'title'    => esc_html__( 'Theme Colors', 'moghadam' ),
-			'priority' => 40,
-		)
-	);
-
-	$wp_customize->add_setting(
-		'moghadam_accent_color',
-		array(
-			'default'           => '#2563eb',
-			'sanitize_callback' => 'sanitize_hex_color',
-			'transport'         => 'postMessage',
-		)
-	);
-
-	$wp_customize->add_control(
-		new WP_Customize_Color_Control(
-			$wp_customize,
-			'moghadam_accent_color',
-			array(
-				'label'   => esc_html__( 'Accent Color', 'moghadam' ),
-				'section' => 'moghadam_colors',
-			)
-		)
-	);
 }
 add_action( 'customize_register', 'moghadam_customize_register' );
-
-/**
- * Output the Customizer-driven CSS custom properties.
- */
-function moghadam_customizer_css() {
-	$accent = get_theme_mod( 'moghadam_accent_color', '#2563eb' );
-
-	if ( ! $accent ) {
-		return;
-	}
-
-	printf(
-		'<style id="moghadam-customizer-css">:root{--moghadam-color-accent:%s;}</style>',
-		esc_attr( $accent )
-	);
-}
-add_action( 'wp_head', 'moghadam_customizer_css', 20 );
 
 /**
  * Enqueue the Customizer live-preview script.

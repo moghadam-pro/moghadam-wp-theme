@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Moghadam 1.1.0\n"
+"Project-Id-Version: Moghadam 1.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/moghadam-pro/moghadam-wp-theme/issues\n"
-"POT-Creation-Date: 2026-08-24 14:02+0000\n"
+"POT-Creation-Date: 2026-08-24 14:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -70,14 +70,6 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: inc/customizer.php:43
-msgid "Theme Colors"
-msgstr ""
-
-#: inc/customizer.php:62
-msgid "Accent Color"
-msgstr ""
-
 #: inc/layout.php:21
 msgid "Content width, sidebar allowed."
 msgstr ""
@@ -92,6 +84,66 @@ msgstr ""
 
 #: inc/layout.php:24
 msgid "Container width, no sidebar, style guide output."
+msgstr ""
+
+#: inc/settings.php:37
+msgid "Variables"
+msgstr ""
+
+#: inc/settings.php:75
+msgid "Moghadam Theme"
+msgstr ""
+
+#: inc/settings.php:76
+msgid "Moghadam"
+msgstr ""
+
+#: inc/settings.php:108
+msgid "You are not allowed to change theme settings."
+msgstr ""
+
+#: inc/settings.php:176
+msgid "Settings restored to their defaults."
+msgstr ""
+
+#: inc/settings.php:201
+msgid "Save settings"
+msgstr ""
+
+#: inc/settings.php:210
+msgid "Restore defaults"
+msgstr ""
+
+#: inc/settings.php:214
+msgid "Discard every saved value and restore the theme defaults?"
+msgstr ""
+
+#: inc/settings.php:238
+msgid "Token"
+msgstr ""
+
+#: inc/settings.php:240
+msgid "Light"
+msgstr ""
+
+#: inc/settings.php:241
+msgid "Dark"
+msgstr ""
+
+#: inc/settings.php:243
+msgid "Value"
+msgstr ""
+
+#: inc/settings.php:245
+msgid "Used for"
+msgstr ""
+
+#: inc/settings.php:328
+msgid "Assign the %s page template to a page to see every token rendered with its live value."
+msgstr ""
+
+#: inc/settings.php:329
+msgid "Theme"
 msgstr ""
 
 #: inc/setup.php:78
@@ -250,24 +302,100 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: page-templates/template-styleguide.php:39
+#: inc/variables.php:38
 msgid "Colors"
 msgstr ""
 
-#: page-templates/template-styleguide.php:55
+#: inc/variables.php:39
+msgid "Each color is defined twice, once per mode. Both sets are always written to the page; which one applies is decided at runtime."
+msgstr ""
+
+#: inc/variables.php:46
+msgid "Links, buttons, focus rings, active menu items, blockquote border."
+msgstr ""
+
+#: inc/variables.php:53
+msgid "Body copy, headings, navigation labels."
+msgstr ""
+
+#: inc/variables.php:60
+msgid "Entry meta, captions, footer text, secondary copy."
+msgstr ""
+
+#: inc/variables.php:67
+msgid "Page background, input fields, mobile menu panel."
+msgstr ""
+
+#: inc/variables.php:74
+msgid "Code blocks, inline code, raised areas."
+msgstr ""
+
+#: inc/variables.php:81
+msgid "Header and footer rules, table cells, input outlines, post separators."
+msgstr ""
+
+#: inc/variables.php:88
 msgid "Typography"
 msgstr ""
 
-#: page-templates/template-styleguide.php:59
-msgid "Token"
+#: inc/variables.php:89
+msgid "Shared by both modes. Font stacks accept any CSS font-family value; keep a system fallback at the end."
+msgstr ""
+
+#: inc/variables.php:108
+msgid "Inline code, code blocks, keyboard input."
+msgstr ""
+
+#: inc/variables.php:114
+msgid "Root size the whole scale is derived from."
+msgstr ""
+
+#: inc/variables.php:121
+msgid "Body copy leading. Unitless."
+msgstr ""
+
+#: inc/variables.php:128
+msgid "Spacing and sizing"
+msgstr ""
+
+#: inc/variables.php:129
+msgid "Shared by both modes. Any CSS length is accepted."
+msgstr ""
+
+#: inc/variables.php:136
+msgid "Table cells, tight gaps, gallery gutters."
+msgstr ""
+
+#: inc/variables.php:142
+msgid "Container padding, header padding, heading margins."
+msgstr ""
+
+#: inc/variables.php:148
+msgid "Paragraph and block spacing, navigation gaps."
+msgstr ""
+
+#: inc/variables.php:154
+msgid "Section padding, post separation, widget spacing."
+msgstr ""
+
+#: inc/variables.php:160
+msgid "Comments area offset."
+msgstr ""
+
+#: inc/variables.php:166
+msgid "Buttons, inputs, images, code blocks."
+msgstr ""
+
+#: inc/variables.php:172
+msgid "The reading measure on the default template."
+msgstr ""
+
+#: inc/variables.php:178
+msgid "Outer page width and wide alignments."
 msgstr ""
 
 #: page-templates/template-styleguide.php:60
 msgid "Variable"
-msgstr ""
-
-#: page-templates/template-styleguide.php:61
-msgid "Used for"
 msgstr ""
 
 #: page-templates/template-styleguide.php:76
@@ -312,10 +440,6 @@ msgstr ""
 
 #: page-templates/template-styleguide.php:87
 msgid "inline_code()"
-msgstr ""
-
-#: page-templates/template-styleguide.php:93
-msgid "Spacing and sizing"
 msgstr ""
 
 #: page-templates/template-styleguide.php:106

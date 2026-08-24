@@ -18,10 +18,4 @@
 			$( '.site-description' ).text( to );
 		} );
 	} );
-
-	wp.customize( 'moghadam_accent_color', function ( value ) {
-		value.bind( function ( to ) {
-			document.documentElement.style.setProperty( '--moghadam-color-accent', to );
-		} );
-	} );
 }( jQuery ) );

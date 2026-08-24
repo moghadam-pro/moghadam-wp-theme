@@ -5,6 +5,52 @@ All notable changes to this theme are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-24
+
+### Added
+
+- **Theme settings screen.** A top-level **Moghadam** menu in the dashboard,
+  built on the Settings API and driven by a tab registry (`inc/settings.php`),
+  so further sections can be added without touching the rendering code. Includes
+  a "Restore defaults" action.
+- **Variables.** Every design token the theme exposes is now editable:
+  - Colors, defined twice — once for light, once for dark.
+  - Typography and spacing/sizing, shared by both modes.
+  - Each token is listed with its CSS custom property name and a description of
+    where it is used.
+- `inc/variables.php`, holding the token schema that the settings screen, the
+  front-end CSS and the block editor palette all read from, so the three cannot
+  drift apart.
+- Generated custom properties are attached inline to `moghadam-main`, in three
+  blocks: the light set on bare `:root`, the dark set behind
+  `prefers-color-scheme` guarded against an explicit light choice, and the dark
+  set again under `:root[data-theme="dark"]`. Dark mode therefore already
+  follows the operating system; the runtime toggle arrives in 1.3.0.
+- Block editor palette and layout widths are filtered from the stored settings
+  via `wp_theme_json_data_theme`, so `theme.json` provides the defaults and the
+  settings provide the live values. Requires WordPress 6.1; on 6.0 the static
+  `theme.json` values apply unchanged.
+- Settings screen styles and colour picker wiring
+  (`assets/css/admin.css`, `assets/js/admin.js`).
+- New filters: `moghadam_variables_schema`, `moghadam_variables_css`,
+  `moghadam_settings_tabs`, `moghadam_settings_capability`.
+
+### Changed
+
+- The Customizer no longer sets the accent colour. Colour, typography and
+  spacing are configured only in **Moghadam → Variables**, which is now the
+  single source of truth. The Customizer keeps the site title and tagline live
+  preview, which belong to WordPress rather than to the theme.
+
+### Security
+
+- Every stored value is validated on save. Colours must be valid hex; sizes must
+  be a CSS length, a unitless number, or a `calc()`/`clamp()`/`min()`/`max()`/
+  `var()` expression built from safe characters; free-text values are stripped of
+  anything that could terminate a declaration, open a rule, or pull in an
+  external resource. Unknown groups and tokens are discarded rather than stored,
+  and a value that fails validation falls back to its default.
+
 ## [1.1.0] - 2026-08-24
 
 ### Added
@@ -50,5 +96,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   live preview, two menu locations, two widget areas, and accessibility
   fundamentals (skip link, screen reader text, focus styles, reduced motion).
 
+[1.2.0]: https://github.com/moghadam-pro/moghadam-wp-theme/releases/tag/v1.2.0
 [1.1.0]: https://github.com/moghadam-pro/moghadam-wp-theme/releases/tag/v1.1.0
 [1.0.0]: https://github.com/moghadam-pro/moghadam-wp-theme/releases/tag/v1.0.0

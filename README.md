@@ -6,7 +6,7 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 
 | | |
 |---|---|
-| **Version** | 1.1.0 |
+| **Version** | 1.2.0 |
 | **Requires WordPress** | 6.0+ |
 | **Requires PHP** | 7.4+ |
 | **License** | [GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html) |
@@ -18,9 +18,10 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 - Five page templates, including a Canvas template for hand-written markup
 - Fully responsive layout with a mobile navigation toggle
 - Right-to-left (RTL) ready — built on CSS logical properties
+- Theme settings screen with editable design tokens for colors, typography and spacing
+- Light and dark palettes, following the visitor's system preference
 - Theming through CSS custom properties (colors, typography, spacing)
 - `theme.json` support: color palette, font sizes, layout widths, wide/full alignment
-- Customizer accent color with live preview
 - Two menu locations (primary, footer) and two widget areas (sidebar, footer)
 - Custom logo, post thumbnails, block styles, responsive embeds
 - Accessible: skip link, screen-reader text, visible focus styles, reduced-motion support
@@ -50,11 +51,15 @@ Then activate **Moghadam** from **Appearance → Themes**.
 moghadam/
 ├── assets/
 │   ├── css/main.css          # Main stylesheet
+│   ├── css/admin.css         # Settings screen styles
 │   ├── js/navigation.js      # Mobile menu toggle
-│   └── js/customizer.js      # Customizer live preview
+│   ├── js/customizer.js      # Customizer live preview
+│   └── js/admin.js           # Settings screen behaviour
 ├── inc/
 │   ├── setup.php             # Theme supports, menus, widget areas
 │   ├── enqueue.php           # Scripts and styles
+│   ├── variables.php         # Design token schema, CSS and theme.json bridge
+│   ├── settings.php          # Dashboard settings screen
 │   ├── layout.php            # Layout helpers
 │   ├── canvas.php            # Canvas template behaviour
 │   ├── style-guide.php       # Style guide token definitions
@@ -127,25 +132,69 @@ Renders every design token — colours, typography, spacing and sizing — next 
 live examples of each styled element, using the values currently in effect. Any
 content written in the editor appears above the generated sections.
 
-## Customization
+## Settings
 
-### Colors and typography
+**Moghadam** in the dashboard sidebar. One tab today, **Variables**; more
+sections will be added there over time.
 
-All design values are CSS custom properties defined at the top of `assets/css/main.css`:
+### Variables
+
+Every design token the theme uses, editable with a description of where each one
+applies:
+
+| Group | Per mode | Tokens |
+| --- | --- | --- |
+| Colors | Yes | Accent, Text, Muted, Background, Surface, Border |
+| Typography | No | Body, heading and monospace fonts, base size, line height |
+| Spacing and sizing | No | Five spacing steps, corner radius, content and container widths |
+
+Colors are defined twice, once per mode. Both sets are written to every page and
+which one applies is decided at runtime:
 
 ```css
-:root {
-	--moghadam-color-accent: #2563eb;
-	--moghadam-color-text: #1f2328;
-	--moghadam-font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-	--moghadam-container: 1100px;
-	--moghadam-content: 800px;
+:root { /* light */ }
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) { /* dark */ }
 }
+
+:root[data-theme="dark"] { /* dark */ }
 ```
 
-Override them in a child theme, or change the accent color from **Appearance → Customize → Theme Colors**.
+So dark mode already follows the visitor's operating system. The control that
+lets them override it arrives in 1.3.0, and this structure means the override
+will win in both directions.
 
-The block editor reads its palette, font sizes and layout widths from `theme.json` — keep the two in sync when you change values.
+### One source of truth
+
+The token schema in `inc/variables.php` is read by the settings screen, by the
+generated front-end CSS, and by the block editor palette. There is nowhere else
+to set a colour:
+
+- `assets/css/main.css` declares the tokens on `:root` as fallbacks and never
+  hard-codes a value.
+- `theme.json` supplies editor defaults, overlaid at runtime from the stored
+  settings through the `wp_theme_json_data_theme` filter (WordPress 6.1+).
+- The Customizer sets no colours at all.
+
+Values are validated on save. Colours must be valid hex, sizes must be a CSS
+length or a `calc()`-style expression, and free text is stripped of anything that
+could break out of a declaration or load an external resource. Anything that
+fails validation falls back to its default.
+
+### Extending the settings screen
+
+```php
+add_filter( 'moghadam_settings_tabs', function ( $tabs ) {
+	$tabs['layout'] = array(
+		'label'    => 'Layout',
+		'callback' => 'my_render_layout_tab',
+	);
+	return $tabs;
+} );
+```
+
+## Customization
 
 ### Child themes
 
