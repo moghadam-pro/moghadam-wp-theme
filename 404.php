@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>
-	<main id="primary" class="site-main container">
+	<main id="primary" <?php moghadam_main_class( 'default' ); ?>>
 		<section class="error-404 not-found">
 			<header class="page-header">
 				<h1 class="page-title"><?php esc_html_e( 'Oops! That page can&rsquo;t be found.', 'moghadam' ); ?></h1>

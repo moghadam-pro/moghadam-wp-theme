@@ -5,6 +5,7 @@
  * 2. Reset & base
  * 3. Typography
  * 4. Layout
+ * 4a. Layout variants
  * 5. Header & navigation
  * 6. Content
  * 7. Comments
@@ -12,8 +13,9 @@
  * 9. Footer
  * 10. Forms
  * 11. WordPress core classes
- * 12. Accessibility
- * 13. Media queries
+ * 12. Style guide
+ * 13. Accessibility
+ * 14. Media queries
  */
 
 /* -------------------------------------------------- 1. Custom properties */
@@ -185,9 +187,27 @@ hr {
 	padding-block: var(--moghadam-space-lg);
 }
 
-.site-main > *,
-.entry-content > * {
+/* -------------------------------------------------- 4a. Layout variants */
+
+/*
+ * Default: the reading measure is capped at the content width. Full Width,
+ * Home and the style guide open up to the container width instead. In every
+ * variant .alignwide and .alignfull still escape the cap, so block editor
+ * alignments behave the way an author expects.
+ */
+
+.site-main--default > *,
+.site-main--default .entry-content > * {
 	max-width: var(--moghadam-content);
+}
+
+.site-main--full-width > *,
+.site-main--home > *,
+.site-main--styleguide > *,
+.site-main--full-width .entry-content > *,
+.site-main--home .entry-content > *,
+.site-main--styleguide .entry-content > * {
+	max-width: none;
 }
 
 .site-main > .alignwide,
@@ -198,6 +218,14 @@ hr {
 .site-main > .alignfull,
 .entry-content > .alignfull {
 	max-width: none;
+}
+
+/* Full-bleed blocks break out of the container padding. */
+.site-main--full-width > .alignfull,
+.site-main--home > .alignfull,
+.site-main--full-width .entry-content > .alignfull,
+.site-main--home .entry-content > .alignfull {
+	margin-inline: calc(var(--moghadam-space-sm) * -1);
 }
 
 /* -------------------------------------------------- 5. Header & navigation */
@@ -575,7 +603,72 @@ input[type="submit"]:hover {
 	width: 100%;
 }
 
-/* -------------------------------------------------- 12. Accessibility */
+/* -------------------------------------------------- 12. Style guide */
+
+.style-guide-section {
+	padding-top: var(--moghadam-space-lg);
+	margin-top: var(--moghadam-space-lg);
+	border-top: 1px solid var(--moghadam-color-border);
+}
+
+.style-guide-swatches {
+	display: grid;
+	gap: var(--moghadam-space-md);
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.style-guide-swatch {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	padding: var(--moghadam-space-sm);
+	border: 1px solid var(--moghadam-color-border);
+	border-radius: var(--moghadam-radius);
+	font-size: 0.875rem;
+}
+
+.style-guide-swatch-chip {
+	display: block;
+	height: 56px;
+	margin-bottom: var(--moghadam-space-xs);
+	border: 1px solid var(--moghadam-color-border);
+	border-radius: var(--moghadam-radius);
+}
+
+.style-guide-usage {
+	color: var(--moghadam-color-muted);
+}
+
+.style-guide-table {
+	font-size: 0.9rem;
+}
+
+.style-guide-scale > * {
+	margin-block: var(--moghadam-space-xs);
+}
+
+.style-guide-spacing-row {
+	display: flex;
+	align-items: center;
+	gap: var(--moghadam-space-sm);
+	flex-wrap: wrap;
+	padding-block: var(--moghadam-space-xs);
+	border-bottom: 1px solid var(--moghadam-color-border);
+	font-size: 0.875rem;
+}
+
+.style-guide-spacing-row strong {
+	flex: 0 0 8.5rem;
+}
+
+.style-guide-bar {
+	height: 12px;
+	min-width: 2px;
+	background-color: var(--moghadam-color-accent);
+	border-radius: 2px;
+}
+
+/* -------------------------------------------------- 13. Accessibility */
 
 .screen-reader-text {
 	position: absolute !important;
@@ -624,7 +717,7 @@ input[type="submit"]:hover {
 	}
 }
 
-/* -------------------------------------------------- 13. Media queries */
+/* -------------------------------------------------- 14. Media queries */
 
 @media (max-width: 782px) {
 	:root {

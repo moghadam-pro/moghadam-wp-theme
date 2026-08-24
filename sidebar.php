@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! is_active_sidebar( 'sidebar-1' ) ) {
+if ( ! moghadam_has_sidebar() ) {
 	return;
 }
 ?>

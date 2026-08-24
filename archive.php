@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>
-	<main id="primary" class="site-main container">
+	<main id="primary" <?php moghadam_main_class( 'default' ); ?>>
 		<?php if ( have_posts() ) : ?>
 			<header class="page-header">
 				<?php

@@ -1,15 +1,20 @@
 <?php
 /**
- * The template for displaying all pages.
+ * Template Name: Full Width
+ * Template Post Type: page
+ *
+ * Site header and footer, no sidebar, content stretched to the full container
+ * width. Wide and full alignments from the block editor are honoured.
  *
  * @package Moghadam
+ * @since   1.1.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>
-	<main id="primary" <?php moghadam_main_class( 'default' ); ?>>
+	<main id="primary" <?php moghadam_main_class( 'full-width' ); ?>>
 		<?php
 		while ( have_posts() ) :
 			the_post();
@@ -23,5 +28,4 @@ get_header();
 		?>
 	</main><!-- #primary -->
 <?php
-get_sidebar();
 get_footer();

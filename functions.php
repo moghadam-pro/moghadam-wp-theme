@@ -9,7 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'MOGHADAM_VERSION' ) ) {
-	define( 'MOGHADAM_VERSION', '1.0.0' );
+	define( 'MOGHADAM_VERSION', '1.1.0' );
 }
 
 if ( ! defined( 'MOGHADAM_DIR' ) ) {
@@ -22,5 +22,8 @@ if ( ! defined( 'MOGHADAM_URI' ) ) {
 
 require_once MOGHADAM_DIR . '/inc/setup.php';
 require_once MOGHADAM_DIR . '/inc/enqueue.php';
+require_once MOGHADAM_DIR . '/inc/layout.php';
+require_once MOGHADAM_DIR . '/inc/canvas.php';
+require_once MOGHADAM_DIR . '/inc/style-guide.php';
 require_once MOGHADAM_DIR . '/inc/template-tags.php';
 require_once MOGHADAM_DIR . '/inc/customizer.php';
