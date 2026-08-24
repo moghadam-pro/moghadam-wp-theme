@@ -163,3 +163,115 @@ both branches.
 Each completed phase gets a minor version bump, a `CHANGELOG.md` entry, an
 annotated Git tag, and a push to both branches. See
 [conventions](05-conventions.md#releases).
+
+---
+
+## D-011: Variables is the single source of truth for design tokens
+
+**Date:** 2026-08-24 · **Status:** Done · **Version:** 1.2.0
+
+The Customizer's accent colour control was removed. Colour, typography and
+spacing are set in **Moghadam → Variables** and nowhere else.
+
+The problem it solves: one value settable from two screens is a trap. Whichever
+was edited last would win, with no indication in the other place, and the two
+would silently disagree.
+
+The Customizer keeps the site title and tagline live preview. Those belong to
+WordPress, not to the theme.
+
+**Rejected:** keeping both and syncing them; keeping the Customizer control and
+having Variables read from it.
+
+---
+
+## D-012: theme.json is filtered at runtime, not rewritten
+
+**Date:** 2026-08-24 · **Status:** Done · **Version:** 1.2.0
+
+`theme.json` stays in the repository as the default. The stored palette and
+layout widths are overlaid at runtime through the `wp_theme_json_data_theme`
+filter, so the block editor palette follows the settings automatically.
+
+**This does not contradict [D-011](#d-011-variables-is-the-single-source-of-truth-for-design-tokens) —
+it is the same decision applied.** `theme.json` is not a second place to set a
+value; it is a *consumer* of the one place. Variables is the source, and both
+`main.css` and the editor palette are fed from it. The failure mode being
+avoided is exactly the one D-011 avoids: a hand-maintained `theme.json` drifting
+away from the settings.
+
+**Rejected:** physically rewriting `theme.json` when settings are saved. Writing
+into the theme directory breaks on read-only installations, and it pollutes a
+version-controlled file with database state.
+
+**Constraint:** the filter was introduced in WordPress 6.1. On 6.0 the static
+`theme.json` values apply unchanged — a graceful degradation, not a failure, so
+the theme's minimum was left at 6.0.
+
+---
+
+## D-013: Both colour sets are always written
+
+**Date:** 2026-08-24 · **Status:** Done · **Version:** 1.2.0
+
+The generated stylesheet emits three blocks, in this order:
+
+```css
+:root { /* light */ }
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) { /* dark */ }
+}
+
+:root[data-theme="dark"] { /* dark */ }
+```
+
+The `:not([data-theme="light"])` guard is what makes the toggle planned in
+[D-006](#d-006-dark-and-light-modes--automatic-with-a-toggle) work in *both*
+directions. Without it, a visitor on a dark-mode operating system who chooses
+light would still get the dark set, because the media query would keep matching.
+
+Writing the dark declarations twice is deliberate and costs a few hundred bytes.
+
+**Rejected:** emitting only the active mode and deciding server-side. The server
+cannot know the visitor's system preference, and caching would freeze whichever
+mode was rendered first.
+
+---
+
+## D-014: Generated CSS is attached inline to the main stylesheet
+
+**Date:** 2026-08-24 · **Status:** Done · **Version:** 1.2.0
+
+Custom properties are attached with `wp_add_inline_style( 'moghadam-main', … )`
+rather than echoed into `wp_head` or written to a file.
+
+Three reasons: the cascade order is explicit, since inline styles attach after
+the handle they depend on; there is no extra HTTP request and no cache
+invalidation problem; and Canvas already dequeues `moghadam-main`, which
+correctly takes the variables with it, with no special case needed.
+
+---
+
+## D-015: Stored values are validated, not merely escaped
+
+**Date:** 2026-08-24 · **Status:** Standing rule · **Version:** 1.2.0
+
+Settings values are written into a `<style>` block, so escaping on output is not
+enough — the values must be provably safe on the way in.
+
+| Control | Rule |
+| --- | --- |
+| `color` | Must pass `sanitize_hex_color()` |
+| `size` | A CSS length, a unitless number, or a `calc()`/`clamp()`/`min()`/`max()`/`var()` expression built from safe characters |
+| `text` | Tags stripped, CSS comments removed, and `{ } ; < > \` deleted. Rejected outright if it contains `url(`, `expression(`, `javascript:`, `@import` or `behavior:` |
+
+Free text keeps commas and quotes, because font stacks need them.
+
+Two further rules: unknown groups and tokens are discarded rather than stored,
+so the option can never accumulate junk; and a value that fails validation falls
+back to its default rather than being stored empty, so the site can never render
+with a missing token.
+
+Verified by a 40-assertion harness run against the real code with WordPress
+stubbed out, covering injection attempts through every control type.

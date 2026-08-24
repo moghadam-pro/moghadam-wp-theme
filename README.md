@@ -16,15 +16,16 @@ the theme is built the way it is lives here.
 | [Templates](docs/04-templates.md) | Reference for every page template |
 | [Conventions](docs/05-conventions.md) | Coding standards, Git workflow, versioning and release rules |
 | [Roadmap](docs/06-roadmap.md) | Planned phases and their status |
-| [Sessions](sessions/) | Chronological record of the working sessions |
+| [Session 01](sessions/2026-08-24-session-01.md) | Repository reset, starter theme, page templates |
+| [Session 02](sessions/2026-08-24-session-02.md) | PHP toolchain, settings screen and design variables |
 
 ## Current state
 
 | | |
 | --- | --- |
-| **Theme version** | 1.1.0 |
-| **Last phase completed** | Phase 1 — page template system |
-| **Next phase** | Phase 2 — theme settings panel and Variables |
+| **Theme version** | 1.2.0 |
+| **Last phase completed** | Phase 2 — settings panel and Variables |
+| **Next phase** | Phase 3 — dark and light mode runtime |
 
 See [CHANGELOG.md](CHANGELOG.md) for the release history, kept in sync with the
 copy on `main`.

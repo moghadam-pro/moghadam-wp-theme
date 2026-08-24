@@ -7,8 +7,8 @@ both branches.
 | --- | --- | --- | --- |
 | 0 | 1.0.0 | Clean WordPress starter theme | ✅ Done |
 | 1 | 1.1.0 | Page template system | ✅ Done |
-| 2 | 1.2.0 | Settings panel and Variables | ⬜ Next |
-| 3 | 1.3.0 | Dark and light mode runtime | ⬜ Planned |
+| 2 | 1.2.0 | Settings panel and Variables | ✅ Done |
+| 3 | 1.3.0 | Dark and light mode runtime | ⬜ Next |
 | 4 | 1.4.0 | Style guide wired to real variables | ⬜ Planned |
 | — | — | Portfolio companion plugin | ⬜ Deferred |
 
@@ -27,30 +27,35 @@ the WordPress default. Layout helpers in `inc/layout.php` so templates declare a
 layout instead of hard-coding classes. Canvas behaviour in `inc/canvas.php`.
 Style guide token definitions in `inc/style-guide.php`.
 
-## Phase 2 — Settings panel and Variables (1.2.0) ⬜
+## Phase 2 — Settings panel and Variables (1.2.0) ✅
 
-A top-level **Moghadam** menu in the dashboard sidebar, built on the WordPress
-Settings API, structured in sections so more can be added over time.
+A top-level **Moghadam** menu built on the Settings API, driven by a tab
+registry so further sections can be added without touching the rendering code.
 
-First section: **Variables** — the colour palette, the typography scale, and a
-statement of where each token is used, held as two complete sets (light and
-dark). Values are stored in a single option array and emitted as CSS custom
-properties in `wp_head`, which is all the existing stylesheet needs to re-theme
-the entire site.
+**Variables** holds every design token: colours as two complete sets, light and
+dark; typography and spacing shared by both; each listed with its custom
+property name and a description of where it applies. Values live in one option
+array and are emitted as custom properties attached inline to the main
+stylesheet.
 
-Open questions for this phase:
+Both open questions were resolved:
 
-- Does Variables replace the Customizer accent colour control, or coexist with
-  it? Two places setting the same value would be a trap.
-- Should `theme.json` be generated from the stored settings, so the block
-  editor palette follows automatically instead of being maintained by hand?
+- **Variables replaces the Customizer accent control.** One value settable from
+  two screens is a trap. → [D-011](02-decisions.md#d-011-variables-is-the-single-source-of-truth-for-design-tokens)
+- **`theme.json` is filtered at runtime, not rewritten.** The file stays as the
+  default; stored values are overlaid via `wp_theme_json_data_theme`, so the
+  editor palette follows the settings and cannot drift.
+  → [D-012](02-decisions.md#d-012-themejson-is-filtered-at-runtime-not-rewritten)
+
+Dark mode already follows the operating system as a consequence of how both
+sets are written. → [D-013](02-decisions.md#d-013-both-colour-sets-are-always-written)
 
 ## Phase 3 — Dark and light mode runtime (1.3.0) ⬜
 
-The token sets from phase 2 become live. `prefers-color-scheme` picks the
-default; a control lets the visitor override it; the choice persists in
-`localStorage`. A small inline script in `<head>` applies the stored choice
-before first paint — see
+The automatic half already works. What remains is the visitor's override: a
+control that sets `data-theme` on the root element, persistence in
+`localStorage`, and a small inline script in `<head>` that applies the stored
+choice before first paint — see
 [D-006](02-decisions.md#d-006-dark-and-light-modes--automatic-with-a-toggle).
 
 Also in scope: `add_editor_style()`, so the block editor renders content with
