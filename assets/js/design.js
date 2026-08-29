@@ -51,7 +51,16 @@
   var lastWidth = window.innerWidth;
 
   function measureViewport() {
-    document.documentElement.style.setProperty('--vh-real', window.innerHeight + 'px');
+    var vh = window.innerHeight;
+    document.documentElement.style.setProperty('--vh-real', vh + 'px');
+
+    // A plugin may inject something above the hero; that height has to come
+    // off, or the bottom of the hero ends up below the fold.
+    var hero = document.querySelector('.hero');
+    if (hero) {
+      var offset = Math.max(0, hero.getBoundingClientRect().top + (window.scrollY || 0));
+      document.documentElement.style.setProperty('--vh-hero', Math.max(480, vh - offset) + 'px');
+    }
   }
   measureViewport();
 

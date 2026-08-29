@@ -118,7 +118,7 @@ img { display: block; max-width: 100%; }
 /* no max-width on svg: with an explicit box and no intrinsic size it makes the
    percentage circular inside grid/flex tracks and browsers halve the icon */
 svg { display: block; }
-button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; border-radius: 2px; }
 ::selection { background: var(--yellow); color: var(--white-100); }
 ::-moz-selection { background: var(--yellow); color: var(--white-100); }
@@ -336,11 +336,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-toggle { display: none; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--text); }
 
 /* ---------- 7. Hero ---------- */
-/* --vh-real is the viewport height measured in JS at load, so browser chrome
-   (bookmarks bar, mobile URL bar) is already discounted */
+/* --vh-hero is the viewport height measured in JS at load, minus anything a
+   plugin injected above the hero. --vh-real is the plain measured height.
+   Both already discount browser chrome (bookmarks bar, mobile URL bar). */
 .hero {
   position: relative;
-  min-height: var(--vh-real, 100svh);
+  min-height: var(--vh-hero, var(--vh-real, 100svh));
   display: flex;
   flex-direction: column;
   padding-block: 0;
