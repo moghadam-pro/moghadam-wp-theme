@@ -44,6 +44,15 @@
   --pill-border:   var(--natural-100);
   --pill-shadow:   0 10px 40px rgba(17, 17, 18, .09), 0 1px 2px rgba(17, 17, 18, .04);
 
+  /* liquid glass */
+  --glass-bg:        rgba(255, 253, 250, .62);
+  --glass-filter:    blur(28px) saturate(190%);
+  --glass-specular:  rgba(255, 255, 255, .95);
+  --glass-underline: rgba(255, 255, 255, .35);
+  --glass-rim:       rgba(17, 17, 18, .07);
+  --glass-sheen:     rgba(255, 255, 255, .5);
+  --glass-shadow:    0 12px 32px rgba(17, 17, 18, .1), 0 2px 8px rgba(17, 17, 18, .05);
+
   /* background guide lines — one faint step off whatever the section sits on */
   --grid-line: rgba(17, 17, 18, .055);
   /* the light that occasionally travels down one of those lines */
@@ -90,6 +99,13 @@
   --pill-bg:       rgba(19, 19, 21, .72);
   --pill-border:   #26262a;
   --pill-shadow:   0 10px 40px rgba(0, 0, 0, .55), 0 1px 2px rgba(0, 0, 0, .4);
+  --glass-bg:        rgba(28, 28, 32, .55);
+  --glass-filter:    blur(28px) saturate(180%) brightness(1.15);
+  --glass-specular:  rgba(255, 255, 255, .22);
+  --glass-underline: rgba(255, 255, 255, .06);
+  --glass-rim:       rgba(255, 255, 255, .1);
+  --glass-sheen:     rgba(255, 255, 255, .07);
+  --glass-shadow:    0 14px 40px rgba(0, 0, 0, .6), 0 2px 8px rgba(0, 0, 0, .45);
   --grid-line:     rgba(255, 255, 255, .05);
   --beam:          rgba(255, 255, 255, .85);
   --beam-soft:     rgba(255, 255, 255, .18);
@@ -305,32 +321,62 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 [data-theme="dark"] .theme-toggle .icon-moon { display: block; }
 [data-theme="dark"] .theme-toggle .icon-sun { display: none; }
 
-/* sticky pill header */
+/* ---------- 6b. Sticky header — liquid glass ----------
+   A translucent pill that reads as a lens over the page: a heavy blurred and
+   saturated backdrop, a bright specular line along the top inner edge, a
+   darker one along the bottom, and a soft drop shadow to lift it off the
+   content. It arrives with a slight scale, the way iOS bars do. */
 .header--sticky {
   position: fixed;
   top: 16px;
   left: 50%;
   right: auto;
   padding: 0;
-  transform: translate3d(-50%, -160%, 0);
+  transform: translate3d(-50%, -180%, 0) scale(.94);
   opacity: 0;
   pointer-events: none;
-  transition: transform .6s var(--ease), opacity .35s var(--ease);
+  transition:
+    transform .55s cubic-bezier(.32, 1.4, .5, 1),
+    opacity .3s var(--ease);
+  will-change: transform, opacity;
 }
-.header--sticky.is-visible { transform: translate3d(-50%, 0, 0); opacity: 1; pointer-events: auto; }
+.header--sticky.is-visible {
+  transform: translate3d(-50%, 0, 0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
 .header__pill {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 16px;
   height: 68px;
   padding-inline: 25px;
-  border: 1px solid var(--pill-border);
   border-radius: 999px;
-  background: var(--pill-bg);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: var(--pill-shadow);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow:
+    inset 0 1px 0 0 var(--glass-specular),
+    inset 0 -1px 0 0 var(--glass-underline),
+    inset 0 0 0 1px var(--glass-rim),
+    var(--glass-shadow);
 }
+/* the sheen: a soft light gradient over the top half of the lens */
+.header__pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--glass-sheen) 0%,
+    transparent 55%
+  );
+}
+.header__pill > * { position: relative; }
+.header__pill .brand .icon-logotype { width: 112px; }
 
 /* mobile nav toggle */
 .nav-toggle { display: none; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--text); }
@@ -769,8 +815,21 @@ a.link-accent:hover { color: var(--yellow); }
   .header { padding-block: 20px; }
   .header .nav, .header .status, .header .clock { display: none; }
   .nav-toggle { display: flex; }
-  .header--sticky { top: 12px; width: min(92vw, 520px); }
-  .header__pill { height: 60px; padding-inline: 20px; justify-content: space-between; }
+  /* the nav has moved into the drawer, so the separator has nothing to separate */
+  .brand-sep { display: none; }
+  /* the floating bar rises from the bottom and stays there, thumb-height */
+  .header--sticky {
+    top: auto;
+    bottom: 16px;
+    width: min(92vw, 520px);
+    transform: translate3d(-50%, 180%, 0) scale(.94);
+  }
+  .header--sticky.is-visible { transform: translate3d(-50%, 0, 0) scale(1); }
+  .header__pill { height: 62px; padding-inline: 20px; }
+  /* brand left, controls right */
+  .header__pill .theme-toggle { margin-inline-start: auto; }
+  /* room under the last section so the bar never covers content */
+  body { padding-bottom: 96px; }
   .about__body { grid-template-columns: 1fr; gap: 48px; }
   .about__bio { padding-top: 0; }
   .about__aside { max-width: 320px; }
@@ -799,6 +858,18 @@ a.link-accent:hover { color: var(--yellow); }
 }
 
 @media (max-width: 767px) {
+  /* the dropdown spans the container, equally inset on both sides, with rows
+     big enough to hit with a thumb */
+  .footer__top { position: relative; }
+  .footer__menu { position: static; }
+  .footer__extra {
+    left: 0; right: 0;
+    bottom: calc(100% + 12px);
+    min-width: 0;
+    padding: 8px;
+  }
+  .footer__extra a { padding: 15px 16px; font-size: 15px; line-height: 20px; }
+
   :root { --fs-display: 30px; --fs-h2: 24px; --fs-h3: 24px; --fs-case: 22px; --gutter: 20px; --section-pad: 64px; }
   .hero__body { padding-top: 110px; }
   /* the terminal is a desktop-only flourish */
@@ -849,8 +920,10 @@ a.link-accent:hover { color: var(--yellow); }
 .drawer__nav .current-menu-item > a { color: var(--yellow); }
 
 /* the admin bar pushes the floating header down */
-.admin-bar .header--sticky { top: 48px; }
-@media (min-width: 783px) {
+@media (min-width: 1024px) {
+	.admin-bar .header--sticky { top: 48px; }
+}
+@media (min-width: 1024px) and (min-width: 783px) {
 	.admin-bar .header--sticky { top: 46px; }
 }
 .admin-bar .js.lock,

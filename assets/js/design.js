@@ -438,10 +438,13 @@
     var sticky = $('#stickyHeader');
     if (!sticky) return;
 
+    // onToggle, not onUpdate: an inactive trigger stops firing onUpdate, so
+    // scrolling back up to the hero left the pill stuck on screen next to the
+    // hero's own header.
     ScrollTrigger.create({
       start: 'top -120',
       end: 99999,
-      onUpdate: function (self) { sticky.classList.toggle('is-visible', self.scroll() > 120); }
+      onToggle: function (self) { sticky.classList.toggle('is-visible', self.isActive); }
     });
 
     if (hero && !REDUCED) {
