@@ -40,8 +40,51 @@ function moghadam_home_schema() {
 				'links' => array(
 					'label'       => __( 'Social links', 'moghadam' ),
 					'type'        => 'social',
-					'description' => __( 'One entry per block, blocks separated by a line of three dashes. Line 1 is the label, line 2 is the URL, everything after is the SVG markup.', 'moghadam' ),
-					'default'     => '',
+					'description' => __( 'One entry per block, blocks separated by a line of three dashes. Line 1 is the label, line 2 is the URL. A third part with SVG markup is optional; without it the icon is taken from the theme sprite by matching the label.', 'moghadam' ),
+					'default'     => "Twitter
+https://twitter.com/
+---
+Facebook
+https://facebook.com/
+---
+LinkedIn
+https://www.linkedin.com/in/
+---
+YouTube
+https://youtube.com/
+---
+Pinterest
+https://pinterest.com/
+---
+Dribbble
+https://dribbble.com/
+---
+Telegram
+https://t.me/
+---
+Upwork
+https://www.upwork.com/
+---
+Instagram
+https://instagram.com/
+---
+Figma
+https://figma.com/@
+---
+Medium
+https://medium.com/@
+---
+WhatsApp
+https://wa.me/
+---
+GitHub
+https://github.com/
+---
+Reddit
+https://reddit.com/user/
+---
+Behance
+https://behance.net/",
 				),
 			),
 		),
@@ -110,7 +153,7 @@ function moghadam_home_schema() {
 					'label'       => __( 'Social links to show', 'moghadam' ),
 					'type'        => 'text',
 					'description' => __( 'Comma separated labels from the Social Links section. Leave empty to show them all.', 'moghadam' ),
-					'default'     => '',
+					'default'     => 'LinkedIn, Dribbble, Upwork, Figma, GitHub',
 				),
 				'show_status'         => array(
 					'label'   => __( 'Show the location status', 'moghadam' ),

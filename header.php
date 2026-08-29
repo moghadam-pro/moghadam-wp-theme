@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
 			<?php moghadam_icon( 'logomark', 'icon-logomark' ); ?>
 		</a>
 		<span class="brand-sep" aria-hidden="true"></span>
-		<?php moghadam_nav( 'primary', 'nav', __( 'Sticky Menu', 'moghadam' ) ); ?>
+		<?php moghadam_nav( moghadam_main_menu_location(), 'nav', __( 'Sticky Menu', 'moghadam' ) ); ?>
 		<?php moghadam_theme_toggle(); ?>
 		<button class="nav-toggle" type="button" data-drawer-open aria-label="<?php esc_attr_e( 'Open menu', 'moghadam' ); ?>">
 			<?php moghadam_icon( 'menu' ); ?>
@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) || exit;
 					<?php moghadam_icon( 'logotype', 'icon-logotype' ); ?>
 				</a>
 				<span class="brand-sep" aria-hidden="true"></span>
-				<?php moghadam_nav( 'primary', 'nav', __( 'Primary Menu', 'moghadam' ) ); ?>
+				<?php moghadam_nav( moghadam_main_menu_location(), 'nav', __( 'Primary Menu', 'moghadam' ) ); ?>
 			</div>
 			<div class="header__right">
 				<?php moghadam_header_status(); ?>

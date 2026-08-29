@@ -87,7 +87,7 @@ function moghadam_drawer() {
 				<?php moghadam_icon( 'close' ); ?>
 			</button>
 		</div>
-		<?php moghadam_nav( 'primary', 'drawer__nav', __( 'Mobile Menu', 'moghadam' ) ); ?>
+		<?php moghadam_nav( moghadam_main_menu_location(), 'drawer__nav', __( 'Mobile Menu', 'moghadam' ) ); ?>
 		<div class="drawer__foot">
 			<?php moghadam_header_status(); ?>
 		</div>

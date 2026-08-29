@@ -39,6 +39,22 @@
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
+  /* ------------------------------------------------------------------ *
+   * 0b. The real viewport height
+   *
+   * 100svh is close but not exact once a bookmarks bar or a mobile URL bar
+   * is in play, so the hero and the pinned section size themselves from the
+   * height actually measured at load. It is only re-measured when the width
+   * changes, otherwise the mobile URL bar sliding away would resize the hero
+   * mid-scroll.
+   * ------------------------------------------------------------------ */
+  var lastWidth = window.innerWidth;
+
+  function measureViewport() {
+    document.documentElement.style.setProperty('--vh-real', window.innerHeight + 'px');
+  }
+  measureViewport();
+
   // handy handle for debugging / for the WordPress port
   window.MPRO = { lenis: lenis };
 
@@ -555,7 +571,13 @@
     }
     window.addEventListener('resize', function () {
       clearTimeout(window.__mproRs);
-      window.__mproRs = setTimeout(function () { ScrollTrigger.refresh(); }, 200);
+      window.__mproRs = setTimeout(function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          measureViewport();
+        }
+        ScrollTrigger.refresh();
+      }, 200);
     });
   }
 

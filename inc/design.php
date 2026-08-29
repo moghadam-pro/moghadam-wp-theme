@@ -167,6 +167,18 @@ function moghadam_is_home_layout() {
 }
 
 /**
+ * The nav menu location the main navigation should read.
+ *
+ * The home page links to anchors on itself; every other page links to real
+ * pages. Falls back to the main menu when no home menu is assigned.
+ *
+ * @return string
+ */
+function moghadam_main_menu_location() {
+	return ( moghadam_is_home_layout() && has_nav_menu( 'home' ) ) ? 'home' : 'primary';
+}
+
+/**
  * The background guide lines.
  *
  * Twelve identical hairlines at container width, tinted from the section they

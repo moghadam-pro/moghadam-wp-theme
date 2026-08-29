@@ -21,7 +21,7 @@ $terminal = trim( (string) moghadam_home( 'hero', 'terminal' ) );
 					<?php moghadam_icon( 'logotype', 'icon-logotype' ); ?>
 				</a>
 				<span class="brand-sep" aria-hidden="true"></span>
-				<?php moghadam_nav( 'primary', 'nav', __( 'Primary Menu', 'moghadam' ) ); ?>
+				<?php moghadam_nav( moghadam_main_menu_location(), 'nav', __( 'Primary Menu', 'moghadam' ) ); ?>
 			</div>
 			<div class="header__right">
 				<?php moghadam_header_status(); ?>

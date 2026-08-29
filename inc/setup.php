@@ -54,7 +54,8 @@ function moghadam_setup() {
 
 	register_nav_menus(
 		array(
-			'primary'     => esc_html__( 'Primary Menu', 'moghadam' ),
+			'home'        => esc_html__( 'Home Menu (anchor links)', 'moghadam' ),
+			'primary'     => esc_html__( 'Main Menu', 'moghadam' ),
 			'footer'      => esc_html__( 'Footer Menu', 'moghadam' ),
 			'footer_more' => esc_html__( 'Footer More Links', 'moghadam' ),
 		)

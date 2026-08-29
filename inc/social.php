@@ -11,7 +11,10 @@
  *     ---
  *     GitHub
  *     https://github.com/example
- *     <svg viewBox="0 0 24 24">...</svg>
+ *
+ * The SVG is optional: leave it out and the icon is taken from the theme's
+ * own sprite by matching the label, which covers every network the design
+ * already ships an icon for.
  *
  * @package Moghadam
  * @since   1.3.0
@@ -192,11 +195,15 @@ function moghadam_social_row( $labels = '', $args = array() ) {
 	);
 
 	foreach ( $links as $link ) {
+		$icon = '' !== trim( $link['svg'] )
+			? $link['svg']
+			: moghadam_get_icon( $link['key'] );
+
 		printf(
 			'<a href="%1$s" aria-label="%2$s" rel="noopener">%3$s</a>',
 			esc_url( $link['url'] ),
 			esc_attr( $link['label'] ),
-			$link['svg'] // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already run through wp_kses.
+			$icon // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_kses'd markup or a theme sprite reference.
 		);
 	}
 

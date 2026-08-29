@@ -224,7 +224,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-radius: var(--radius);
   font-family: var(--font-ui);
   font-size: var(--fs-btn);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 18px;
   white-space: nowrap;
   transition: transform .25s var(--ease), background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
@@ -336,9 +336,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-toggle { display: none; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--text); }
 
 /* ---------- 7. Hero ---------- */
+/* --vh-real is the viewport height measured in JS at load, so browser chrome
+   (bookmarks bar, mobile URL bar) is already discounted */
 .hero {
   position: relative;
-  min-height: 100svh;
+  min-height: var(--vh-real, 100svh);
   display: flex;
   flex-direction: column;
   padding-block: 0;
@@ -368,15 +370,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .terminal p { white-space: pre; overflow: hidden; }
 .hero__actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding-top: 16px; }
 .hero__cta { display: flex; align-items: center; gap: 12px; }
-.hero__foot { padding-block: 32px; }
+.hero__foot { padding-block: 40px; }
 .scroll-hint {
-  display: flex; flex-direction: column; align-items: center; gap: 24px;
+  position: relative;
+  display: block;
   margin-inline: auto; width: max-content;
   color: var(--text-body); font-size: var(--fs-body); line-height: 18px;
 }
 .scroll-hint__bar {
-  position: relative;
+  position: absolute;
+  left: 50%; bottom: calc(100% + 24px);
   width: 1px; height: 30px;
+  margin-left: -1px;
   background: var(--line);
   overflow: hidden;
 }
@@ -574,7 +579,7 @@ a.link-accent:hover { color: var(--yellow); }
 /* while pinned the section fills the viewport and its content sits centred;
    after the fourth step the page scrolls on to the CTA and footer */
 @media (min-width: 1024px) {
-  .how { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+  .how { min-height: var(--vh-real, 100svh); display: flex; flex-direction: column; justify-content: center; }
   .how > .container { width: 100%; }
 }
 .how__body { display: grid; grid-template-columns: 818px 350px; padding-top: 26px; }
@@ -650,6 +655,10 @@ a.link-accent:hover { color: var(--yellow); }
   line-height: 1.36;
   color: var(--white-100);
 }
+/* like the marquee, the black band would vanish into a dark page, so it flips */
+[data-theme="dark"] .cta { background: var(--white-100); --grid-line: rgba(17, 17, 18, .06); --beam: rgba(238, 170, 0, .95); --beam-soft: rgba(238, 170, 0, .28); }
+[data-theme="dark"] .cta__title { color: var(--natural-900); }
+[data-theme="dark"] .cta .btn--accent { color: var(--natural-900); }
 
 /* ---------- 14. Footer ---------- */
 .footer { position: relative; padding-block: 32px; }
@@ -713,7 +722,7 @@ a.link-accent:hover { color: var(--yellow); }
 /* ---------- 15. Reveal / first-load ---------- */
 /* Everything here is scoped to .js, which is only present when gsap + Lenis
    actually loaded. Without them the page degrades to a plain scrolling site. */
-.js.lock, .js.lock body { overflow: hidden; height: 100svh; }
+.js.lock, .js.lock body { overflow: hidden; height: var(--vh-real, 100svh); }
 .js #rest { opacity: 0; visibility: hidden; transition: opacity .7s var(--ease); }
 .js #rest.is-revealed { opacity: 1; visibility: visible; }
 /* word spans produced by splitWords() in main.js */
@@ -879,6 +888,9 @@ a.link-accent:hover { color: var(--yellow); }
 
 /* inner pages inherit the tokens but not the home layout */
 .site-main { position: relative; }
+/* every home section sets its own 120px block padding, so the generic
+   .site-main padding from main.css would only double it up */
+.site-main--home { padding-block: 0; }
 .entry-title,
 .page-title {
 	font-family: var(--font-display);
