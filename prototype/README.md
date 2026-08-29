@@ -24,7 +24,7 @@ prototype/
                            re-injects it into index.html
   assets/icons/*.svg       the exported icon set — edit/replace freely
   assets/icons/sprite.html generated — do not edit by hand
-  assets/img/portrait.png  About-section portrait
+  assets/img/about-img@2x.png  About-section portrait (560x420, shown at 280x210)
 ```
 
 Dependencies come from CDN: **GSAP 3.12 + ScrollTrigger** and **Lenis 1.1**. If
@@ -64,9 +64,14 @@ cards 4 × 288 + 3 × 16.
 
 ### Background grid
 
-Twelve guide lines at container width sit behind **every** section. The colour
-comes from a per-section `--grid-line`, always a faint step off that section's
-background:
+Twelve identical 1px guide lines at container width sit behind **every**
+section, on a 109px pitch. They come from one repeating gradient whose interval
+is `calc((100% - 1px) / 11)`, so the twelfth line lands flush on the right edge
+— no border is used, because a border would paint on top of the last gradient
+line and read twice as dark.
+
+The colour comes from a per-section `--grid-line`, always a faint step off that
+section's background:
 
 | Section background | `--grid-line` |
 |---|---|
@@ -85,9 +90,10 @@ The grid is hidden below 768px.
 | Header morphs from the in-hero bar to the floating pill (fully rounded, `backdrop-filter: blur(18px) saturate(160%)`) | `setupHeader()` |
 | Scroll hint: a soft band of colour drifts down the hairline and fades out | `@keyframes scrollfill` |
 | Two marquee bars, opposite directions, slow (20 px/s; the yellow row 15% slower). Pauses on hover | `setupMarquees()` |
-| Case-study rows: the black row is the hover state — background, title, metadata and arrow all transition in | CSS `.case-row:hover` |
-| Section 05 pins and the left column steps through 4 blocks (fade out / fade in) before the page continues; snaps to each step | `setupPinnedSteps()` |
-| Live Istanbul clock, theme toggle, work filter, footer "More Links", mobile drawer | `main.js` §1, §2, §6, §7, §10 |
+| Case-study rows sit on the same hairline as the background grid; the black row is the hover state — background, borders, title, metadata and arrow all transition in | CSS `.case-row:hover` |
+| Section 05 fills the viewport with its content centred, pins, steps through 4 blocks (fade out / fade in) with a snap, then releases to the CTA and footer | `setupPinnedSteps()` + `@media (min-width:1024px) .how` |
+| Footer "More Links" is a dropdown anchored to its trigger, closed by outside click or Escape | `setupFooterMore()` |
+| Live Istanbul clock, theme toggle, work filter, mobile drawer | `main.js` §1, §2, §6, §10 |
 
 ### Per-section load motion
 
@@ -127,13 +133,16 @@ timeline per section — no scrubbing, no filters, nothing that forces layout.
    plugin. Hidden below 768px. No JS drives it.
 2. **The SKILLS list was transcribed from a screenshot** and is worth a
    proofread — a couple of entries were hard to read at that resolution.
-3. **Portrait** is cut from a Figma render, so its transparency above the orange
-   plate is a colour-key, not a real alpha channel. Drop a replacement at
-   `assets/img/portrait.png` (280 × 214) any time.
+3. **Portrait** is the supplied 2× export. Replace
+   `assets/img/about-img@2x.png` with another 560 × 420 file to change it; the
+   CSS always renders it at 280 × 210.
 4. **Contrast.** The yellow buttons use white text as designed — that is ≈1.9:1
    against `#eeaa00` and fails WCAG AA. Same for the faded white text on the
    yellow case-study section. Worth revisiting before launch.
 5. **Work cards** are the `001`–`007` placeholders; `data-cat` values are
    assigned so the filter can be demonstrated.
-6. `#rest` must never receive a CSS transform — it would become the containing
+6. `svg` deliberately has **no** `max-width: 100%` in the reset. With an
+   explicit box and no intrinsic size, that percentage is circular inside a
+   grid or flex track and browsers resolve icons at half width.
+7. `#rest` must never receive a CSS transform — it would become the containing
    block for ScrollTrigger's `position: fixed` pin and break section 05.

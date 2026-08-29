@@ -205,7 +205,8 @@
 
         <aside class="about__aside">
           <figure class="portrait" data-anim="wipe">
-            <img src="assets/img/portrait.png" alt="Sayid Moghadam" width="280" height="214" loading="lazy">
+            <!-- exported at 2x, displayed at 280x210 for high-density screens -->
+            <img src="assets/img/about-img@2x.png" alt="Sayid Moghadam" width="280" height="210" loading="lazy">
           </figure>
           <p class="about__ai" data-anim="fade">I see AI less as a feature and more as a creative partner&mdash;something I think with, build with, and learn from. The best results come from a real conversation: curious, unexpected, and genuinely useful.</p>
           <a class="btn btn--ghost" href="#" data-anim="fade">
@@ -356,7 +357,7 @@
         </div>
 
         <div class="skills">
-          <p class="skills__head"><i class="skills__rule" data-anim="draw-x"></i>SKILLS</p>
+          <p class="skills__head">SKILLS<i class="skills__rule" data-anim="draw-x"></i></p>
           <ul class="skills__list" data-anim="skills">
             <li>Product Strategy</li><li>Interaction Design</li>
             <li>Information Architecture &amp; User Flows</li>
@@ -394,14 +395,16 @@
           <a href="#">Privacy Policy</a>
           <a href="#">Cookie Policy</a>
         </nav>
-        <button class="footer__more" type="button" data-more aria-expanded="false" aria-controls="footerExtra">
-          More Links <svg class="icon icon-chev" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
-        </button>
+        <div class="footer__menu">
+          <button class="footer__more" type="button" data-more aria-expanded="false" aria-controls="footerExtra">
+            More Links <svg class="icon icon-chev" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+          </button>
+          <nav class="footer__extra" id="footerExtra" aria-label="More footer links" hidden>
+            <a href="#works">Projects</a><a href="#">Font Story</a><a href="#">MPRO Plugins</a>
+            <a href="#">My Tabs</a><a href="#">Design System</a><a href="#">Mobbin Mirror</a>
+          </nav>
+        </div>
       </div>
-      <nav class="footer__extra" id="footerExtra" aria-label="More footer links" hidden>
-        <a href="#works">Projects</a><a href="#">Font Story</a><a href="#">MPRO Plugins</a>
-        <a href="#">My Tabs</a><a href="#">Design System</a><a href="#">Mobbin Mirror</a>
-      </nav>
       <div class="footer__rule" role="presentation" data-anim="draw-x"></div>
       <div class="footer__bottom">
         <p class="footer__legal" data-anim="fade">

@@ -55,6 +55,7 @@
   --fs-display: 48px;
   --fs-h2: 36px;
   --fs-h3: 40px;
+  --fs-case: 32px;
   --fs-lead: 24px;
   --fs-body: 14px;
   --lh-body: 28px;
@@ -108,7 +109,10 @@ body {
 h1, h2, h3, h4, p, figure { margin: 0; }
 ul { margin: 0; padding: 0; list-style: none; }
 a { color: inherit; text-decoration: none; }
-img, svg { display: block; max-width: 100%; }
+img { display: block; max-width: 100%; }
+/* no max-width on svg: with an explicit box and no intrinsic size it makes the
+   percentage circular inside grid/flex tracks and browsers halve the icon */
+svg { display: block; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; border-radius: 2px; }
 .u-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
@@ -128,16 +132,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* blueprint guide lines (Figma layer "gride-line") — 12 lines across the
    container, present in every section, tinted from the section background */
 .grid-lines { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+/* 12 identical 1px lines: the repeat interval is (width - 1px)/11 so the last
+   one lands flush on the right edge. No border here — a border would sit on
+   top of the final gradient line and read twice as dark. */
 .grid-lines__inner {
   width: 100%;
   max-width: var(--container);
   height: 100%;
   margin-inline: auto;
-  border-right: 1px solid var(--grid-line);
   background-image: repeating-linear-gradient(
     to right,
     var(--grid-line) 0 1px,
-    transparent 1px calc(100% / 11)
+    transparent 1px calc((100% - 1px) / 11)
   );
 }
 .section > .container, .cta > .container, .footer > .container { position: relative; z-index: 1; }
@@ -252,7 +258,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .theme-toggle {
-  display: grid; place-items: center;
+  display: flex; align-items: center; justify-content: center;
   width: 24px; height: 24px;
   color: var(--yellow);
   transition: transform .4s var(--ease);
@@ -291,7 +297,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 /* mobile nav toggle */
-.nav-toggle { display: none; width: 24px; height: 24px; color: var(--text); }
+.nav-toggle { display: none; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--text); }
 
 /* ---------- 7. Hero ---------- */
 .hero {
@@ -393,8 +399,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .about__desc { margin-top: 16px; color: var(--text-body); }
 .link-accent { color: var(--veryperi-400); border-bottom: 1px solid currentColor; }
 .about__aside { display: flex; flex-direction: column; }
-.portrait { width: 280px; margin-top: 24px; }
-.portrait img { width: 280px; height: auto; }
+/* the source is a 2x export (560x420) shown at 280x210 */
+.portrait { width: 280px; max-width: 100%; margin-top: 24px; }
+.portrait img { width: 100%; height: auto; aspect-ratio: 280 / 210; }
 .about__ai { margin-top: 24px; color: var(--text-body); }
 .about__aside .btn--ghost { margin-top: 24px; }
 
@@ -406,6 +413,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   --line: var(--white-30);
   color: var(--natural-900);
 }
+/* rows rest on the same hairline as the background grid and only go solid
+   white under the cursor */
+.cases { --row-line: var(--grid-line); }
 .cases .eyebrow, .cases .section-link { color: rgba(255, 255, 255, .72); }
 .cases .section-link:hover { color: #fff; }
 .cases__intro { display: grid; grid-template-columns: 763px 1fr; padding-bottom: 64px; }
@@ -414,17 +424,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-weight: 700;
   font-size: var(--fs-h2);
   line-height: 1.36;
-  color: var(--natural-900);
+  color: var(--white-100);
 }
 .cases__note { align-self: end; text-align: right; color: rgba(255, 255, 255, .82); padding-inline: 16px; }
 .cases__list { position: relative; z-index: 1; }
 .case-row {
   position: relative;
   display: block;
-  border-top: 1px solid var(--white-100);
-  transition: background-color .45s var(--ease);
+  border-top: 1px solid var(--row-line);
+  transition: background-color .45s var(--ease), border-color .45s var(--ease);
 }
-.case-row:last-child { border-bottom: 1px solid var(--white-100); }
+.case-row:last-child { border-bottom: 1px solid var(--row-line); }
 /* the row grid is the full 1200 container — the 16px inset lives on the
    left/right columns themselves, exactly as in Figma */
 .case-row__inner {
@@ -446,7 +456,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .case-row__name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--fs-h3);
+  font-size: var(--fs-case);
   line-height: 1.22;
   text-align: right;
   white-space: nowrap;
@@ -483,7 +493,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   opacity: 0; transform: translate(-6px, 6px);
   transition: opacity .4s var(--ease), transform .5s var(--ease);
 }
-.case-row:hover, .case-row:focus-visible { background: var(--natural-900); }
+.case-row:hover, .case-row:focus-visible { background: var(--natural-900); border-color: var(--white-100); }
+.case-row:hover + .case-row, .case-row:focus-visible + .case-row { border-top-color: var(--white-100); }
 .case-row:hover .case-row__name,  .case-row:focus-visible .case-row__name  { color: var(--white-100); }
 .case-row:hover .case-row__info,  .case-row:focus-visible .case-row__info  { color: var(--white-100); }
 .case-row:hover .case-row__meta,  .case-row:focus-visible .case-row__meta  { opacity: 1; transform: none; }
@@ -519,8 +530,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .work-card.is-hidden { display: none; }
 
 /* ---------- 12. How I work (pinned scroll) ---------- */
+/* while pinned the section fills the viewport and its content sits centred;
+   after the fourth step the page scrolls on to the CTA and footer */
+@media (min-width: 1024px) {
+  .how { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+  .how > .container { width: 100%; }
+}
 .how__body { display: grid; grid-template-columns: 818px 350px; padding-top: 26px; }
-.how__stage { position: relative; min-height: 560px; display: flex; align-items: center; }
+.how__stage { position: relative; min-height: 260px; display: flex; align-items: center; }
 .how__steps { position: relative; width: 100%; min-height: 220px; }
 .how-step {
   position: absolute;
@@ -563,8 +580,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .skills__list {
   display: flex; flex-wrap: wrap; align-items: baseline;
   color: var(--text-body);
-  text-align: right;
-  justify-content: flex-end;
 }
 .skills__list li { display: inline-flex; align-items: baseline; }
 .skills__list li::after {
@@ -596,15 +611,30 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- 14. Footer ---------- */
 .footer { position: relative; padding-block: 32px; }
 .footer__top { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 16px; }
-.footer__nav, .footer__extra { display: flex; flex-wrap: wrap; align-items: center; }
+.footer__nav { display: flex; flex-wrap: wrap; align-items: center; }
 .footer__nav a, .footer__extra a {
   padding: 8px;
   font-size: var(--fs-body); line-height: 18px;
   color: var(--text-body);
-  transition: color .25s var(--ease);
+  transition: color .25s var(--ease), background-color .25s var(--ease);
 }
 .footer__nav a:hover, .footer__extra a:hover { color: var(--yellow); }
-.footer__extra { padding: 0 16px 24px; }
+/* "More Links" is a dropdown menu anchored to its trigger */
+.footer__menu { position: relative; }
+.footer__extra {
+  position: absolute;
+  top: calc(100% + 8px); right: 0;
+  z-index: 30;
+  display: flex; flex-direction: column;
+  min-width: 190px;
+  padding: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--pill-shadow);
+}
+.footer__extra a { padding: 7px 10px; border-radius: 6px; white-space: nowrap; }
+.footer__extra a:hover { background: var(--card); }
 .footer__more {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px;
@@ -666,7 +696,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ---------- 17. Responsive ---------- */
 @media (max-width: 1279px) {
-  :root { --section-pad: 96px; --fs-display: 42px; --fs-h2: 32px; --fs-h3: 34px; }
+  :root { --section-pad: 96px; --fs-display: 42px; --fs-h2: 32px; --fs-h3: 34px; --fs-case: 28px; }
   .about__body { grid-template-columns: 1fr 300px; gap: 48px; }
   .about__bio { padding-top: 40px; }
   .cases__intro { grid-template-columns: 1.35fr 1fr; }
@@ -675,14 +705,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .case-row__right { width: 330px; }
   .how__body { grid-template-columns: 1fr 320px; }
   .how__ghost { font-size: 150px; right: 0; }
-  .portrait, .portrait img { width: 100%; }
 }
 
 @media (max-width: 1023px) {
-  :root { --section-pad: 80px; --fs-display: 36px; --fs-h2: 28px; --fs-h3: 28px; --fs-lead: 20px; }
+  :root { --section-pad: 80px; --fs-display: 36px; --fs-h2: 28px; --fs-h3: 28px; --fs-case: 24px; --fs-lead: 20px; }
+  .footer__extra { right: auto; left: 0; }
   .header { padding-block: 20px; }
   .header .nav, .header .status, .header .clock { display: none; }
-  .nav-toggle { display: grid; place-items: center; }
+  .nav-toggle { display: flex; }
   .header--sticky { top: 12px; width: min(92vw, 520px); }
   .header__pill { height: 60px; padding-inline: 20px; justify-content: space-between; }
   .about__body { grid-template-columns: 1fr; gap: 48px; }
@@ -713,7 +743,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 @media (max-width: 767px) {
-  :root { --fs-display: 30px; --fs-h2: 24px; --fs-h3: 24px; --gutter: 20px; --section-pad: 64px; }
+  :root { --fs-display: 30px; --fs-h2: 24px; --fs-h3: 24px; --fs-case: 22px; --gutter: 20px; --section-pad: 64px; }
   .hero__body { padding-top: 110px; }
   /* the terminal is a desktop-only flourish */
   .terminal { display: none; }
