@@ -821,6 +821,7 @@ a.link-accent:hover { color: var(--yellow); }
   .header--sticky {
     top: auto;
     bottom: 16px;
+    padding: 0;   /* the mobile .header padding-block would offset the bar */
     width: min(92vw, 520px);
     transform: translate3d(-50%, 180%, 0) scale(.94);
   }
