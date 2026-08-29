@@ -23,9 +23,10 @@ defined( 'ABSPATH' ) || exit;
  */
 function moghadam_portfolio_candidates() {
 	return array(
+		// MPRO Portfolio, the plugin this theme is built alongside.
+		'mpro_portfolio'    => 'mpro_portfolio_category',
 		'jetpack-portfolio' => 'jetpack-portfolio-type',
 		'portfolio'         => 'portfolio_category',
-		'mpro_work'         => 'mpro_work_category',
 		'project'           => 'project_category',
 		'avada_portfolio'   => 'portfolio_category',
 	);
