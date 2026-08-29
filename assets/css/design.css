@@ -855,8 +855,13 @@ a.link-accent:hover { color: var(--yellow); }
 .header--inner + #primary,
 .header--inner ~ .site-main { padding-top: var(--section-pad); }
 
-/* portfolio thumbnails fill their card */
+/* Portfolio thumbnails fill their card. The image is taken out of flow because
+   the card centres its content with place-items, and a centred grid item sizes
+   to its own content — height:100% would not resolve and the image spilled. */
+.work-card { position: relative; }
 .work-card img {
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
