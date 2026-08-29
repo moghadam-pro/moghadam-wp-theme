@@ -229,10 +229,12 @@
       var hostH = host.getBoundingClientRect().height;
       var vh    = window.innerHeight;
 
-      var len   = rand(90, Math.min(vh * 0.45, 320));            // comet + tail
-      var trip  = rand(140, Math.min(vh, Math.max(200, hostH))); // never > one screen
+      var len   = rand(140, Math.min(vh * 0.5, 340));            // comet + tail
+      var trip  = rand(180, Math.min(vh, Math.max(240, hostH))); // never > one screen
       var from  = rand(-len, Math.max(0, hostH - trip * 0.4));
-      var dur   = rand(2.4, 5.2);
+      // Duration follows the distance so every comet drifts at the same slow
+      // pace, whatever length it drew.
+      var dur   = trip / rand(46, 68);
 
       var beam = document.createElement('i');
       beam.className = 'grid-beam';

@@ -226,8 +226,8 @@ function moghadam_home_schema() {
 				'description'    => array(
 					'label'       => __( 'Description', 'moghadam' ),
 					'type'        => 'html',
-					'description' => __( 'Links get the accent underline automatically when given class="link-accent".', 'moghadam' ),
-					'default'     => 'By <a class="link-accent" href="#">combining design with coding</a>, I turn complex ideas into simple, useful, and scalable digital products&mdash;balancing a developer&rsquo;s mindset, a user&rsquo;s perspective, and real business needs.',
+					'description' => __( 'Wrap a phrase in &lt;span class="link-accent"&gt; to colour it, or use the same class on an &lt;a&gt; for a real link.', 'moghadam' ),
+					'default'     => 'By <span class="link-accent">combining design with coding</span>, I turn complex ideas into simple, useful, and scalable digital products&mdash;balancing a developer&rsquo;s mindset, a user&rsquo;s perspective, and real business needs.',
 				),
 				'image'          => array(
 					'label'       => __( 'Portrait', 'moghadam' ),

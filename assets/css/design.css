@@ -143,6 +143,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    one lands flush on the right edge. No border here — a border would sit on
    top of the final gradient line and read twice as dark. */
 .grid-lines__inner {
+  position: relative;   /* the beams position against this box, not the section */
   width: 100%;
   max-width: var(--container);
   height: 100%;
@@ -155,16 +156,31 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .section > .container, .cta > .container, .footer > .container { position: relative; z-index: 1; }
 
-/* a comet of light drifts down one of the guide lines now and then — spawned,
-   placed and timed at random by setupGridBeams() in main.js */
+/* A comet of light drifts down one of the guide lines now and then — spawned,
+   placed and timed at random by setupGridBeams() in main.js. It always sits
+   exactly on a line: 1px core, a soft halo either side of it, and a mask that
+   dissolves both above the midpoint so the tail has no hard top edge. */
 .grid-beam {
-  position: absolute;
-  top: 0; left: 0;
-  width: 1px;
-  pointer-events: none;
-  background: linear-gradient(to bottom, transparent 0%, var(--beam-soft) 55%, var(--beam) 100%);
-  box-shadow: 0 0 10px 1px var(--beam-soft), 0 0 3px 0 var(--beam);
-  will-change: transform, opacity;
+	position: absolute;
+	top: 0; left: 0;
+	width: 1px;
+	pointer-events: none;
+	background: linear-gradient(to bottom, transparent 0%, var(--beam) 100%);
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .18) 50%, #000 100%);
+	mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .18) 50%, #000 100%);
+	will-change: transform, opacity;
+}
+.grid-beam::before {
+	content: "";
+	position: absolute;
+	inset: 0 -6px;
+	background: linear-gradient(
+		to right,
+		transparent 0%,
+		var(--beam-soft) 42%,
+		var(--beam-soft) 58%,
+		transparent 100%
+	);
 }
 
 /* section eyebrow:  01 —— Hero Section */
@@ -403,6 +419,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   white-space: nowrap;
 }
 .marquee__slash { color: rgba(255, 255, 255, .5); font-size: var(--fs-meta); }
+/* in dark mode the black bar would vanish into the page, so it flips */
+[data-theme="dark"] .marquee__row--dark { background: var(--white-100); }
+[data-theme="dark"] .marquee__row--dark .tag { color: var(--natural-900); }
+[data-theme="dark"] .marquee__row--dark .marquee__slash { color: rgba(17, 17, 18, .5); }
 
 /* ---------- 9. About ---------- */
 .about__body { display: grid; grid-template-columns: 824px 1fr; gap: 64px; padding-top: 26px; }
@@ -417,7 +437,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .about__quote em { font-style: normal; color: var(--yellow); }
 .about__desc { margin-top: 16px; color: var(--text-body); }
-.link-accent { color: var(--veryperi-400); border-bottom: 1px solid currentColor; }
+.link-accent { color: var(--veryperi-400); }
+a.link-accent:hover { color: var(--yellow); }
 .about__aside { display: flex; flex-direction: column; }
 /* the source is a 2x export (560x420) shown at 280x210 */
 .portrait { width: 280px; max-width: 100%; margin-top: 24px; }
@@ -645,7 +666,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .footer__menu { position: relative; }
 .footer__extra {
   position: absolute;
-  top: calc(100% + 8px); right: 0;
+  bottom: calc(100% + 8px); right: 0;   /* the footer is at the page bottom, so it opens upward */
   z-index: 30;
   display: flex; flex-direction: column;
   min-width: 190px;
@@ -668,7 +689,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .footer__more:hover { color: var(--yellow); }
 .footer__more .icon-chev { width: 16px; height: 16px; transition: transform .3s var(--ease); }
-.footer__more[aria-expanded="true"] .icon-chev { transform: rotate(180deg); }
+.footer__more .icon-chev { transform: rotate(180deg); }
+.footer__more[aria-expanded="true"] .icon-chev { transform: rotate(0deg); }
 .footer__rule {
   height: 1px;
   transform-origin: left;
