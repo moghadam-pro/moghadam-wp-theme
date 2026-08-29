@@ -146,3 +146,10 @@ timeline per section — no scrubbing, no filters, nothing that forces layout.
    grid or flex track and browsers resolve icons at half width.
 7. `#rest` must never receive a CSS transform — it would become the containing
    block for ScrollTrigger's `position: fixed` pin and break section 05.
+
+---
+
+**Archived.** This prototype lives on the `docs` branch only. The design now
+ships inside the theme itself on `main` — `assets/css/design.css`,
+`assets/js/design.js`, `template-parts/home/` and `inc/` — and that copy is the
+source of truth. Fixes made after the port are not backported here.
