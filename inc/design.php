@@ -58,6 +58,23 @@ function moghadam_motion_libraries() {
 }
 
 /**
+ * Cache-busting version for a theme asset.
+ *
+ * The theme version alone is not enough: a hotfix shipped under the same
+ * version would keep serving the cached file. The file's own timestamp is.
+ *
+ * @param string $relative Path relative to the theme root.
+ * @return string
+ */
+function moghadam_asset_version( $relative ) {
+	$file = MOGHADAM_DIR . '/' . ltrim( $relative, '/' );
+
+	return file_exists( $file )
+		? MOGHADAM_VERSION . '.' . filemtime( $file )
+		: MOGHADAM_VERSION;
+}
+
+/**
  * Enqueue the design stylesheet and scripts.
  */
 function moghadam_design_scripts() {
@@ -71,7 +88,7 @@ function moghadam_design_scripts() {
 		'moghadam-design',
 		MOGHADAM_URI . '/assets/css/design.css',
 		array( 'moghadam-style' ),
-		MOGHADAM_VERSION
+		moghadam_asset_version( 'assets/css/design.css' )
 	);
 
 	$libraries = moghadam_motion_libraries();
@@ -86,7 +103,7 @@ function moghadam_design_scripts() {
 		'moghadam-design',
 		MOGHADAM_URI . '/assets/js/design.js',
 		$deps,
-		MOGHADAM_VERSION,
+		moghadam_asset_version( 'assets/js/design.js' ),
 		true
 	);
 
