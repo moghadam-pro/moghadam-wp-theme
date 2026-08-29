@@ -90,6 +90,16 @@ function moghadam_design_scripts() {
 		true
 	);
 
+	// Attached to the handle rather than hooked on wp_footer: footer scripts
+	// print at priority 20, so a hooked fallback would run before gsap even
+	// arrived and would strip the js/lock classes from every page.
+	wp_add_inline_script(
+		'moghadam-design',
+		"if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || typeof Lenis === 'undefined') {"
+			. " document.documentElement.classList.remove('js', 'lock'); }",
+		'after'
+	);
+
 	wp_localize_script(
 		'moghadam-design',
 		'moghadamDesign',
@@ -127,19 +137,6 @@ function moghadam_design_head_script() {
 }
 add_action( 'wp_head', 'moghadam_design_head_script', 1 );
 
-/**
- * Drop the js/lock classes again if a motion library failed to load.
- */
-function moghadam_design_fallback_script() {
-	?>
-	<script>
-		if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || typeof Lenis === 'undefined') {
-			document.documentElement.classList.remove('js', 'lock');
-		}
-	</script>
-	<?php
-}
-add_action( 'wp_footer', 'moghadam_design_fallback_script', 5 );
 
 /**
  * Whether the current request renders the home page layout.
