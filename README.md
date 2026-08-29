@@ -6,7 +6,7 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 
 | | |
 |---|---|
-| **Version** | 1.2.0 |
+| **Version** | 1.3.0 |
 | **Requires WordPress** | 6.0+ |
 | **Requires PHP** | 7.4+ |
 | **License** | [GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html) |
@@ -22,7 +22,10 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 - Light and dark palettes, following the visitor's system preference
 - Theming through CSS custom properties (colors, typography, spacing)
 - `theme.json` support: color palette, font sizes, layout widths, wide/full alignment
-- Two menu locations (primary, footer) and two widget areas (sidebar, footer)
+- Three menu locations (primary, footer, footer more links) and two widget areas (sidebar, footer)
+- Home page design layer: pinned scroll section, background guide lines, per-section reveal animations
+- **Edit Home** panel in the Customizer covering every string on the front page
+- Case study rows built from posts; visual work read from whichever portfolio plugin is installed
 - Custom logo, post thumbnails, block styles, responsive embeds
 - Accessible: skip link, screen-reader text, visible focus styles, reduced-motion support
 - Translation ready via the bundled `.pot` file

@@ -5,6 +5,45 @@ All notable changes to this theme are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-08-29
+
+### Added
+
+- **The Moghadam.pro design layer**, applied theme-wide rather than only to the
+  front page: header, footer, background guide lines, typography, colour tokens
+  and the reveal animations all load on every request
+  (`inc/design.php`, `assets/css/design.css`, `assets/js/design.js`).
+- **Appearance > Customize > Edit Home.** A panel with one section per home
+  section, generated from a single schema (`inc/home/home-settings.php`) so the
+  editor and the templates cannot disagree about what exists. Seventy-eight
+  fields across Social Links, Hero, Marquee, About, Case Studies, Visual Work,
+  How I Work, Call to Action and Footer.
+- **Social links**, defined once in the Customizer as label / URL / SVG blocks
+  and reused by the hero and the footer, each choosing which of them to show
+  (`inc/social.php`).
+- **Case study rows from posts** (`inc/case-studies.php`). The four newest posts
+  in the chosen category fill section 03: the title becomes the row name, the
+  post tags become the bracketed line, a Case Study meta box supplies the two
+  right-hand lines, and the row links to the single post.
+- **Portfolio bridge** for section 04 (`inc/portfolio.php`). Detects the
+  installed portfolio plugin, renders every filter with its own newest items so
+  each filter always shows a full set, and hides the section entirely when no
+  plugin answers. Unknown plugins can register through the
+  `moghadam_portfolio_source` filter.
+- **SVG sprite** built from `assets/icons` and printed once per request, with
+  fills and strokes rewritten to `currentColor` (`inc/icons.php`).
+- A third menu location, **Footer More Links**, feeding the footer dropdown.
+- `front-page.php`, and a `moghadam_footer_end` hook so the home page can wrap
+  the footer in its deferred `#rest` container.
+
+### Changed
+
+- `header.php` and `footer.php` now render the new design: the floating pill
+  header, the in-hero bar, the mobile drawer and the footer with its dropdown.
+- The Home Page template renders the design sections instead of block content.
+- Menus in the header, footer, footer dropdown and drawer all come from
+  WordPress nav menu locations.
+
 ## [1.2.0] - 2026-08-24
 
 ### Added

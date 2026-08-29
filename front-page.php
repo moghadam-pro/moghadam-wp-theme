@@ -1,14 +1,12 @@
 <?php
 /**
- * Template Name: Home Page
- * Template Post Type: page
+ * The front page.
  *
- * The landing page layout. Its content is edited in
- * Appearance > Customize > Edit Home rather than in the block editor, so any
- * page can carry the home design even when it is not the site's front page.
+ * Content is edited in Appearance > Customize > Edit Home; sections 03 and 04
+ * additionally read from posts and from the portfolio plugin.
  *
  * @package Moghadam
- * @since   1.1.0
+ * @since   1.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
