@@ -1,11 +1,13 @@
 /* ==========================================================================
    Moghadam.pro — prototype behaviour
    Deps (CDN, loaded before this file): gsap, ScrollTrigger, Lenis
+
+   Motion budget: transforms, opacity and clip-path only — no filters, no
+   layout-affecting properties, every scroll reveal runs once.
    ========================================================================== */
 (function () {
   'use strict';
 
-  var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
@@ -14,6 +16,8 @@
     document.documentElement.classList.remove('js', 'lock');
     return;
   }
+
+  var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -67,61 +71,7 @@
   })();
 
   /* ------------------------------------------------------------------ *
-   * 3. Hero terminal typing
-   * ------------------------------------------------------------------ */
-  var TERMINAL_LINES = [
-    '[22:43:45.86][STRATEGY]Defining product goals and success metrics... Done',
-    '[22:43:46.36][UX]Get:5 design://user-flows stable InRelease [12.8 kB]',
-    '[22:43:46.80][UX]Get:6 design://information-architecture stable InRelease [16.1 kB]',
-    '[22:43:47.20][UX]Building journey map... Done',
-    '[22:43:48.27][UX]Resolving navigation dependencies... Done'
-  ];
-
-  function esc(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-  function colorize(line) {
-    return esc(line)
-      .replace(/\[(STRATEGY|UX|RESEARCH)\]/g, '<span class="t-tag">[$1]</span>')
-      .replace(/\bDone\b/g, '<span class="t-ok">Done</span>');
-  }
-
-  function runTerminal() {
-    var host = $('[data-terminal]');
-    if (!host) return;
-    host.innerHTML = '';
-    if (REDUCED) {
-      TERMINAL_LINES.forEach(function (l) {
-        var p = document.createElement('p');
-        p.innerHTML = colorize(l);
-        host.appendChild(p);
-      });
-      return;
-    }
-    var li = 0;
-    function nextLine() {
-      if (li >= TERMINAL_LINES.length) return;
-      var text = TERMINAL_LINES[li];
-      var p = document.createElement('p');
-      host.appendChild(p);
-      var i = 0;
-      (function typeChar() {
-        i++;
-        p.innerHTML = esc(text.slice(0, i)) + '<span class="terminal__caret"></span>';
-        if (i < text.length) {
-          setTimeout(typeChar, 7 + Math.random() * 9);
-        } else {
-          p.innerHTML = colorize(text);
-          li++;
-          setTimeout(nextLine, 180);
-        }
-      })();
-    }
-    nextLine();
-  }
-
-  /* ------------------------------------------------------------------ *
-   * 4. Word splitter for headline reveals
+   * 3. Word splitter for headline reveals
    * ------------------------------------------------------------------ */
   function splitWords(el) {
     if (el.dataset.split === 'done') return $$('.w', el);
@@ -149,44 +99,121 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 5. Reveal animations
+   * 4. Reveal vocabulary
+   *
+   *    fade      y + opacity          generic copy
+   *    lines     word-by-word         headlines
+   *    wipe      clip-path from left  images
+   *    draw-x    scaleX from left     hairlines
+   *    slide-l/r x + opacity          marquee bars
+   *    cards     grid-ordered stagger work grid
+   *    skills    fast list stagger    skills list
+   *    stagger   children fade-up     link/icon rows
+   *    row       clip wipe + lift     case-study rows
    * ------------------------------------------------------------------ */
-  function animateIn(el, delay) {
-    if (REDUCED) { gsap.set(el, { clearProps: 'all', opacity: 1, y: 0 }); return; }
-    if (el.dataset.anim === 'lines') {
-      var words = splitWords(el);
-      gsap.set(el, { opacity: 1 });
-      gsap.from(words, {
-        y: 22, opacity: 0, duration: .85, ease: 'expo.out',
-        stagger: .028, delay: delay || 0, force3D: true
-      });
-    } else {
-      gsap.to(el, { opacity: 1, y: 0, duration: .8, ease: 'expo.out', delay: delay || 0 });
-    }
-  }
+  var SET = {
+    fade:      { opacity: 0, y: 24 },
+    lines:     { opacity: 0 },
+    wipe:      { clipPath: 'inset(0 100% 0 0)' },
+    'draw-x':  { scaleX: 0 },
+    'slide-l': { opacity: 0, x: -60 },
+    'slide-r': { opacity: 0, x: 60 },
+    cards:     { opacity: 1 },
+    skills:    { opacity: 1 },
+    stagger:   { opacity: 1 },
+    row:       { opacity: 0, clipPath: 'inset(0 100% 0 0)' }
+  };
 
   function prepare(scope) {
+    if (REDUCED) return;
     $$('[data-anim]', scope).forEach(function (el) {
-      if (el.dataset.anim === 'lines') gsap.set(el, { opacity: 0 });
-      else gsap.set(el, { opacity: 0, y: 24 });
+      var kind = el.dataset.anim;
+      if (kind === 'cards')        gsap.set(el.children, { opacity: 0, y: 22, scale: .97 });
+      else if (kind === 'skills')  gsap.set(el.children, { opacity: 0, y: 10 });
+      else if (kind === 'stagger') gsap.set(el.children, { opacity: 0, y: 12 });
+      if (SET[kind]) gsap.set(el, SET[kind]);
+      if (kind === 'row') gsap.set($('.case-row__line', el), { scaleY: 0 });
     });
   }
 
-  function observeSection(section) {
+  function play(el, tl, at) {
+    var kind = el.dataset.anim;
+    at = at || 0;
+    switch (kind) {
+      case 'lines':
+        gsap.set(el, { opacity: 1 });
+        tl.from(splitWords(el), {
+          y: 22, opacity: 0, duration: .8, ease: 'expo.out', stagger: .026
+        }, at);
+        break;
+      case 'wipe':
+        tl.to(el, { clipPath: 'inset(0 0% 0 0)', duration: .95, ease: 'expo.out' }, at);
+        break;
+      case 'draw-x':
+        tl.to(el, { scaleX: 1, duration: .7, ease: 'expo.out' }, at);
+        break;
+      case 'slide-l':
+      case 'slide-r':
+        tl.to(el, { x: 0, opacity: 1, duration: 1, ease: 'expo.out' }, at);
+        break;
+      case 'cards':
+        tl.to(el.children, {
+          opacity: 1, y: 0, scale: 1, duration: .7, ease: 'expo.out',
+          stagger: { each: .05, from: 'start' }
+        }, at);
+        break;
+      case 'skills':
+        tl.to(el.children, { opacity: 1, y: 0, duration: .45, ease: 'power2.out', stagger: .018 }, at);
+        break;
+      case 'stagger':
+        tl.to(el.children, { opacity: 1, y: 0, duration: .5, ease: 'expo.out', stagger: .035 }, at);
+        break;
+      case 'row':
+        tl.to(el, { opacity: 1, clipPath: 'inset(0 0% 0 0)', duration: .7, ease: 'expo.out' }, at);
+        tl.to($('.case-row__line', el), { scaleY: 1, duration: .5, ease: 'power2.out' }, at + .2);
+        break;
+      default:
+        tl.to(el, { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, at);
+    }
+  }
+
+  /* Per-section choreography: each entry returns the delay for an element.
+     Anything not listed just plays in document order. */
+  var CHOREO = {
+    about: function (el, i) {
+      if (el.dataset.anim === 'wipe') return .15;         // portrait wipes early
+      return i * 0.07;
+    },
+    cases: function (el, i) {
+      return el.dataset.anim === 'row' ? .25 + (i - 3) * .09 : i * .07;
+    },
+    works: function (el, i) { return i * .1; },
+    how:   function (el, i) { return i * .08; },
+    contact: function (el, i) { return i * .12; }
+  };
+
+  function revealSection(section) {
     var items = $$('[data-anim]', section);
     if (!items.length) return;
+    var choreo = CHOREO[section.id];
+
+    if (REDUCED) return;   // nothing was hidden, nothing to play
+
     ScrollTrigger.create({
       trigger: section,
-      start: 'top 78%',
+      start: 'top 82%',
       once: true,
       onEnter: function () {
-        items.forEach(function (el, i) { animateIn(el, Math.min(i * 0.06, 0.5)); });
+        var tl = gsap.timeline({ defaults: { force3D: true } });
+        items.forEach(function (el, i) {
+          play(el, tl, choreo ? choreo(el, i) : Math.min(i * .07, .6));
+        });
       }
     });
   }
 
   /* ------------------------------------------------------------------ *
-   * 6. Marquee — duplicate track content, speed derived from width
+   * 5. Marquee — duplicate track content, speed derived from width
    * ------------------------------------------------------------------ */
   function setupMarquees() {
     $$('[data-marquee]').forEach(function (track, i) {
@@ -196,14 +223,14 @@
       clone.setAttribute('aria-hidden', 'true');
       track.appendChild(clone);
       var width = item.getBoundingClientRect().width;
-      var SPEED = 38;            // px per second — deliberately slow
-      var drift = i === 0 ? 1 : 1.18;   // second row drifts a little slower
+      var SPEED = 20;                    // px per second — a slow drift
+      var drift = i === 0 ? 1 : 1.15;    // the yellow row runs slightly slower
       track.style.animationDuration = Math.round((width / SPEED) * drift) + 's';
     });
   }
 
   /* ------------------------------------------------------------------ *
-   * 7. Visual works filter
+   * 6. Visual work filter
    * ------------------------------------------------------------------ */
   function setupFilters() {
     var cards = $$('[data-works] .work-card');
@@ -216,8 +243,7 @@
           b.setAttribute('aria-selected', on ? 'true' : 'false');
         });
         cards.forEach(function (card) {
-          var show = cat === 'all' || card.dataset.cat === cat;
-          card.classList.toggle('is-hidden', !show);
+          card.classList.toggle('is-hidden', !(cat === 'all' || card.dataset.cat === cat));
         });
         if (!REDUCED) {
           gsap.fromTo(cards.filter(function (c) { return !c.classList.contains('is-hidden'); }),
@@ -226,6 +252,30 @@
         }
         ScrollTrigger.refresh();
       });
+    });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 7. Footer "More Links"
+   * ------------------------------------------------------------------ */
+  function setupFooterMore() {
+    var btn = $('[data-more]');
+    var extra = $('#footerExtra');
+    if (!btn || !extra) return;
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      if (open) {
+        extra.hidden = true;
+      } else {
+        extra.hidden = false;
+        if (!REDUCED) {
+          gsap.fromTo(extra.children, { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: .45, ease: 'expo.out', stagger: .03 });
+        }
+      }
+      ScrollTrigger.refresh();
+      lenis.resize();
     });
   }
 
@@ -249,17 +299,16 @@
         s.classList.toggle('is-active', n === i);
         s.classList.toggle('is-past', n < i);
       });
-      if (ghost) {
-        var label = '0' + (i + 1);
-        if (REDUCED) { ghost.textContent = label; return; }
-        gsap.to(ghost, {
-          opacity: 0, y: 18, duration: .22, ease: 'power2.in',
-          onComplete: function () {
-            ghost.textContent = label;
-            gsap.fromTo(ghost, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .38, ease: 'expo.out' });
-          }
-        });
-      }
+      if (!ghost) return;
+      var label = '0' + (i + 1);
+      if (REDUCED) { ghost.textContent = label; return; }
+      gsap.to(ghost, {
+        opacity: 0, y: 18, duration: .22, ease: 'power2.in',
+        onComplete: function () {
+          ghost.textContent = label;
+          gsap.fromTo(ghost, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .38, ease: 'expo.out' });
+        }
+      });
     }
 
     var mm = gsap.matchMedia();
@@ -292,7 +341,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 9. Header: hero -> sticky pill
+   * 9. Header: hero bar -> floating pill
    * ------------------------------------------------------------------ */
   function setupHeader() {
     var hero = $('#heroHeader');
@@ -302,9 +351,7 @@
     ScrollTrigger.create({
       start: 'top -120',
       end: 99999,
-      onUpdate: function (self) {
-        sticky.classList.toggle('is-visible', self.scroll() > 120);
-      }
+      onUpdate: function (self) { sticky.classList.toggle('is-visible', self.scroll() > 120); }
     });
 
     if (hero && !REDUCED) {
@@ -367,8 +414,9 @@
 
     setupMarquees();
     prepare(rest);
-    $$('#rest .section, #rest .cta, #rest .footer, #rest .marquee').forEach(observeSection);
+    $$('#rest .marquee, #rest .section, #rest .cta, #rest .footer').forEach(revealSection);
     setupFilters();
+    setupFooterMore();
     setupPinnedSteps();
     setupHeader();
 
@@ -414,17 +462,11 @@
     setupAnchors();
     armFirstScroll();
 
-    // hero intro sequence
-    var items = $$('[data-anim]', hero);
-    if (REDUCED) {
-      items.forEach(function (el) { animateIn(el, 0); });
-      runTerminal();
-    } else {
-      items.forEach(function (el, i) { animateIn(el, 0.15 + i * 0.09); });
-      setTimeout(runTerminal, 900);
+    if (!REDUCED) {
+      var tl = gsap.timeline({ delay: .15, defaults: { force3D: true } });
+      $$('[data-anim]', hero).forEach(function (el, i) { play(el, tl, i * .09); });
     }
 
-    // safety: if fonts land late, re-measure
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
     }
