@@ -143,73 +143,111 @@
       case 'lines':
         gsap.set(el, { opacity: 1 });
         tl.from(splitWords(el), {
-          y: 22, opacity: 0, duration: .8, ease: 'expo.out', stagger: .026
+          y: 26, opacity: 0, duration: 1.05, ease: 'expo.out', stagger: .05
         }, at);
         break;
       case 'wipe':
-        tl.to(el, { clipPath: 'inset(0 0% 0 0)', duration: .95, ease: 'expo.out' }, at);
+        tl.to(el, { clipPath: 'inset(0 0% 0 0)', duration: 1.25, ease: 'expo.out' }, at);
         break;
       case 'draw-x':
-        tl.to(el, { scaleX: 1, duration: .7, ease: 'expo.out' }, at);
+        tl.to(el, { scaleX: 1, duration: .95, ease: 'expo.out' }, at);
         break;
       case 'slide-l':
       case 'slide-r':
-        tl.to(el, { x: 0, opacity: 1, duration: 1, ease: 'expo.out' }, at);
+        tl.to(el, { x: 0, opacity: 1, duration: 1.2, ease: 'expo.out' }, at);
         break;
       case 'cards':
         tl.to(el.children, {
-          opacity: 1, y: 0, scale: 1, duration: .7, ease: 'expo.out',
-          stagger: { each: .05, from: 'start' }
+          opacity: 1, y: 0, scale: 1, duration: .9, ease: 'expo.out',
+          stagger: { each: .09, from: 'start' }
         }, at);
         break;
       case 'skills':
-        tl.to(el.children, { opacity: 1, y: 0, duration: .45, ease: 'power2.out', stagger: .018 }, at);
+        tl.to(el.children, { opacity: 1, y: 0, duration: .6, ease: 'power2.out', stagger: .03 }, at);
         break;
       case 'stagger':
-        tl.to(el.children, { opacity: 1, y: 0, duration: .5, ease: 'expo.out', stagger: .035 }, at);
+        tl.to(el.children, { opacity: 1, y: 0, duration: .65, ease: 'expo.out', stagger: .05 }, at);
         break;
       case 'row':
-        tl.to(el, { opacity: 1, clipPath: 'inset(0 0% 0 0)', duration: .7, ease: 'expo.out' }, at);
-        tl.to($('.case-row__line', el), { scaleY: 1, duration: .5, ease: 'power2.out' }, at + .2);
+        tl.to(el, { opacity: 1, clipPath: 'inset(0 0% 0 0)', duration: .9, ease: 'expo.out' }, at);
+        tl.to($('.case-row__line', el), { scaleY: 1, duration: .7, ease: 'power2.out' }, at + .25);
         break;
       default:
-        tl.to(el, { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, at);
+        tl.to(el, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, at);
     }
   }
 
-  /* Per-section choreography: each entry returns the delay for an element.
-     Anything not listed just plays in document order. */
-  var CHOREO = {
-    about: function (el, i) {
-      if (el.dataset.anim === 'wipe') return .15;         // portrait wipes early
-      return i * 0.07;
-    },
-    cases: function (el, i) {
-      return el.dataset.anim === 'row' ? .25 + (i - 3) * .09 : i * .07;
-    },
-    works: function (el, i) { return i * .1; },
-    how:   function (el, i) { return i * .08; },
-    contact: function (el, i) { return i * .12; }
-  };
-
+  /* Each block gets its own trigger so it animates as it scrolls into view
+     rather than the whole section firing at once. */
   function revealSection(section) {
-    var items = $$('[data-anim]', section);
-    if (!items.length) return;
-    var choreo = CHOREO[section.id];
-
     if (REDUCED) return;   // nothing was hidden, nothing to play
-
-    ScrollTrigger.create({
-      trigger: section,
-      start: 'top 82%',
-      once: true,
-      onEnter: function () {
-        var tl = gsap.timeline({ defaults: { force3D: true } });
-        items.forEach(function (el, i) {
-          play(el, tl, choreo ? choreo(el, i) : Math.min(i * .07, .6));
-        });
-      }
+    $$('[data-anim]', section).forEach(function (el, i) {
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 88%',
+        once: true,
+        onEnter: function () {
+          play(el, gsap.timeline({
+            delay: Math.min(i * .06, .3),
+            defaults: { force3D: true }
+          }), 0);
+        }
+      });
     });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 4b. Light travelling down the background grid
+   *
+   * One or two comets at a time, on a random line, starting at a random
+   * point, running a random distance that never exceeds the viewport
+   * height, then fading out. Colour comes from the section's own --beam.
+   * ------------------------------------------------------------------ */
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
+  function setupGridBeams() {
+    if (REDUCED) return;
+    var hosts = $$('.grid-lines__inner');
+    if (!hosts.length) return;
+
+    var MAX_LIVE = 2;
+    var live = 0;
+
+    function spawn() {
+      var pool = hosts.filter(function (h) {
+        var b = h.getBoundingClientRect();
+        return b.width > 0 && b.bottom > 0 && b.top < window.innerHeight;
+      });
+      if (!pool.length) return;
+
+      var host  = pool[(Math.random() * pool.length) | 0];
+      var hostH = host.getBoundingClientRect().height;
+      var vh    = window.innerHeight;
+
+      var len   = rand(90, Math.min(vh * 0.45, 320));            // comet + tail
+      var trip  = rand(140, Math.min(vh, Math.max(200, hostH))); // never > one screen
+      var from  = rand(-len, Math.max(0, hostH - trip * 0.4));
+      var dur   = rand(2.4, 5.2);
+
+      var beam = document.createElement('i');
+      beam.className = 'grid-beam';
+      beam.style.left = 'calc(' + ((Math.random() * 12) | 0) + ' * (100% - 1px) / 11)';
+      beam.style.height = len.toFixed(0) + 'px';
+      host.appendChild(beam);
+      live++;
+
+      gsap.timeline({ onComplete: function () { beam.remove(); live--; } })
+        .fromTo(beam, { y: from, opacity: 0 }, { y: from + trip, duration: dur, ease: 'none' }, 0)
+        .to(beam, { opacity: 1, duration: dur * .28, ease: 'power1.out' }, 0)
+        .to(beam, { opacity: 0, duration: dur * .42, ease: 'power1.in' }, dur * .58);
+    }
+
+    (function loop() {
+      setTimeout(function () {
+        if (live < MAX_LIVE && !document.hidden) spawn();
+        loop();
+      }, rand(1400, 5200));
+    })();
   }
 
   /* ------------------------------------------------------------------ *
@@ -427,6 +465,7 @@
     setupFooterMore();
     setupPinnedSteps();
     setupHeader();
+    setupGridBeams();
 
     // NOTE: never put a transform on #rest — it would become the containing
     // block for ScrollTrigger's position:fixed pin inside section 05.

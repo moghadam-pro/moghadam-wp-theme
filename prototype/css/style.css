@@ -46,6 +46,9 @@
 
   /* background guide lines — one faint step off whatever the section sits on */
   --grid-line: rgba(17, 17, 18, .055);
+  /* the light that occasionally travels down one of those lines */
+  --beam:      rgba(238, 170, 0, .9);
+  --beam-soft: rgba(238, 170, 0, .22);
 
   /* type */
   --font-display: "Averia Sans Libre", "Trebuchet MS", sans-serif;
@@ -88,6 +91,8 @@
   --pill-border:   #26262a;
   --pill-shadow:   0 10px 40px rgba(0, 0, 0, .55), 0 1px 2px rgba(0, 0, 0, .4);
   --grid-line:     rgba(255, 255, 255, .05);
+  --beam:          rgba(255, 255, 255, .85);
+  --beam-soft:     rgba(255, 255, 255, .18);
   --veryperi-400:  #9394d6;
 }
 
@@ -115,6 +120,8 @@ img { display: block; max-width: 100%; }
 svg { display: block; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; border-radius: 2px; }
+::selection { background: var(--yellow); color: var(--white-100); }
+::-moz-selection { background: var(--yellow); color: var(--white-100); }
 .u-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 .u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
@@ -147,6 +154,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   );
 }
 .section > .container, .cta > .container, .footer > .container { position: relative; z-index: 1; }
+
+/* a comet of light drifts down one of the guide lines now and then — spawned,
+   placed and timed at random by setupGridBeams() in main.js */
+.grid-beam {
+  position: absolute;
+  top: 0; left: 0;
+  width: 1px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, var(--beam-soft) 55%, var(--beam) 100%);
+  box-shadow: 0 0 10px 1px var(--beam-soft), 0 0 3px 0 var(--beam);
+  will-change: transform, opacity;
+}
 
 /* section eyebrow:  01 —— Hero Section */
 .eyebrow {
@@ -264,6 +283,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: transform .4s var(--ease);
 }
 .theme-toggle:hover { transform: rotate(30deg); }
+.theme-toggle .icon { width: 18px; height: 18px; }
 .theme-toggle .icon-moon { display: none; }
 [data-theme="dark"] .theme-toggle { color: var(--moon); }
 [data-theme="dark"] .theme-toggle .icon-moon { display: block; }
@@ -415,7 +435,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 /* rows rest on the same hairline as the background grid and only go solid
    white under the cursor */
-.cases { --row-line: var(--grid-line); }
+.cases { --row-line: var(--grid-line); --beam: rgba(255, 255, 255, .95); --beam-soft: rgba(255, 255, 255, .3); }
 .cases .eyebrow, .cases .section-link { color: rgba(255, 255, 255, .72); }
 .cases .section-link:hover { color: #fff; }
 .cases__intro { display: grid; grid-template-columns: 763px 1fr; padding-bottom: 64px; }
@@ -598,6 +618,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: var(--natural-900);
   padding-block: 64px;
   --grid-line: rgba(255, 255, 255, .05);
+  --beam: rgba(238, 170, 0, .95);
+  --beam-soft: rgba(238, 170, 0, .28);
 }
 .cta__row { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding-inline: 16px; }
 .cta__title {
@@ -633,6 +655,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-radius: var(--radius);
   box-shadow: var(--pill-shadow);
 }
+/* the class sets display:flex, which outranks the UA rule for [hidden] */
+.footer__extra[hidden] { display: none; }
 .footer__extra a { padding: 7px 10px; border-radius: 6px; white-space: nowrap; }
 .footer__extra a:hover { background: var(--card); }
 .footer__more {
