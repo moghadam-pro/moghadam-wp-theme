@@ -121,7 +121,9 @@ add_action( 'wp_enqueue_scripts', 'moghadam_design_scripts', 20 );
  * light palette at anyone using the dark one.
  */
 function moghadam_design_head_script() {
-	$lock = moghadam_is_home_layout() ? " 'lock'" : '';
+	// "lock" only on the home layout, where the page below the hero waits for
+	// the visitor's first scroll.
+	$classes = moghadam_is_home_layout() ? "'js', 'lock'" : "'js'";
 	?>
 	<script>
 		(function () {
@@ -130,7 +132,7 @@ function moghadam_design_head_script() {
 				if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 				document.documentElement.setAttribute('data-theme', t);
 			} catch (e) {}
-			document.documentElement.classList.add('js'<?php echo $lock; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>);
+			document.documentElement.classList.add(<?php echo $classes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>);
 		})();
 	</script>
 	<?php
