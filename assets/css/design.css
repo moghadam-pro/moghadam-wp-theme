@@ -1262,6 +1262,7 @@ a.link-accent:hover { color: var(--yellow); }
 .post-nav {
 	display: grid;
 	gap: 16px;
+	align-items: start;
 	margin-block: 72px 0;
 }
 @media (min-width: 700px) {
@@ -1319,7 +1320,10 @@ a.link-accent:hover { color: var(--yellow); }
 .related__grid {
 	display: grid;
 	gap: 24px;
-	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 700px) {
+	.related__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .related__media {
 	display: block;
