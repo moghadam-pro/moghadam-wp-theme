@@ -276,13 +276,23 @@ function moghadam_render_variables_tab() {
 									: '';
 								?>
 								<td>
+									<?php
+									// Only colour tokens get the picker. Per-mode groups used to
+									// be colours only, so this was unconditional and would have
+									// mangled a size or a multiplier.
+									$is_color = 'color' === $control;
+									?>
 									<input
 										type="text"
 										id="<?php echo esc_attr( 'moghadam-' . $group_key . '-' . $mode . '-' . $token_key ); ?>"
 										name="<?php echo esc_attr( $name ); ?>"
 										value="<?php echo esc_attr( $value ); ?>"
-										class="moghadam-color-field"
-										data-default-color="<?php echo esc_attr( $token[ $mode ] ); ?>"
+										class="<?php echo $is_color ? 'moghadam-color-field' : 'regular-text code'; ?>"
+										<?php if ( $is_color ) : ?>
+											data-default-color="<?php echo esc_attr( $token[ $mode ] ); ?>"
+										<?php else : ?>
+											placeholder="<?php echo esc_attr( $token[ $mode ] ); ?>"
+										<?php endif; ?>
 										aria-label="<?php echo esc_attr( sprintf( '%1$s (%2$s)', $token['label'], 'light' === $mode ? __( 'Light', 'moghadam' ) : __( 'Dark', 'moghadam' ) ) ); ?>"
 									>
 								</td>

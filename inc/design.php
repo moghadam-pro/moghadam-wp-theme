@@ -199,13 +199,21 @@ function moghadam_glass_filter() {
 	if ( ! moghadam_glass_refraction_enabled() ) {
 		return;
 	}
+
+	// Both come from Moghadam > Variables > Sticky Header Refraction.
+	$scale  = (float) moghadam_get_variable( 'glass_lens', 'lens-scale' );
+	$soften = (float) moghadam_get_variable( 'glass_lens', 'lens-soften' );
+
+	if ( $scale <= 0 ) {
+		return;
+	}
 	?>
 	<svg class="glass-filter-defs" aria-hidden="true" focusable="false" width="0" height="0">
 		<filter id="mpro-glass" primitiveUnits="objectBoundingBox">
 			<feImage result="map" width="100%" height="100%" x="0" y="0"
 				href="<?php echo esc_url( MOGHADAM_URI . '/assets/img/glass-displacement.webp' ); ?>" />
-			<feGaussianBlur in="SourceGraphic" stdDeviation="0.03" result="blur" />
-			<feDisplacementMap in="blur" in2="map" scale="0.42"
+			<feGaussianBlur in="SourceGraphic" stdDeviation="<?php echo esc_attr( $soften ); ?>" result="blur" />
+			<feDisplacementMap in="blur" in2="map" scale="<?php echo esc_attr( $scale ); ?>"
 				xChannelSelector="R" yChannelSelector="G" />
 		</filter>
 	</svg>

@@ -44,18 +44,14 @@
   --pill-border:   var(--natural-100);
   --pill-shadow:   0 10px 40px rgba(17, 17, 18, .09), 0 1px 2px rgba(17, 17, 18, .04);
 
-  /* Liquid glass. The lighting model below is adapted from Den Dionigi's
-     "Apple Liquid glass switcher" pen: a tint plus a stack of inset shadows
-     that read as a bevelled lens. reflex-light and reflex-dark scale the
-     highlight and shade halves per theme. */
-  --glass-tint:         #bbbbbc;
-  --glass-light:        #fff;
-  --glass-dark:         #000;
-  --glass-reflex-light: 1;
-  --glass-reflex-dark:  1;
-  --glass-tint-amount:  16%;
-  --glass-blur:         14px;
-  --glass-saturation:   170%;
+  /* Liquid glass. The lighting model is adapted from Den Dionigi's "Apple
+     Liquid glass switcher" pen: a tint over the blurred backdrop plus a stack
+     of inset shadows that read as a bevelled lens.
+     Every --glass-* value below the two constants is owned by the Variables
+     screen (Moghadam > Variables > Sticky Header Glass); the fallbacks in the
+     rules keep the design honest if that stylesheet is ever dequeued. */
+  --glass-light: #fff;
+  --glass-dark:  #000;
 
   /* background guide lines — one faint step off whatever the section sits on */
   --grid-line: rgba(17, 17, 18, .055);
@@ -103,11 +99,6 @@
   --pill-bg:       rgba(19, 19, 21, .72);
   --pill-border:   #26262a;
   --pill-shadow:   0 10px 40px rgba(0, 0, 0, .55), 0 1px 2px rgba(0, 0, 0, .4);
-  --glass-tint:         #bbbbbc;
-  --glass-reflex-light: .3;
-  --glass-reflex-dark:  2;
-  --glass-tint-amount:  10%;
-  --glass-saturation:   150%;
   --grid-line:     rgba(255, 255, 255, .05);
   --beam:          rgba(255, 255, 255, .85);
   --beam-soft:     rgba(255, 255, 255, .18);
@@ -355,23 +346,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   height: 68px;
   padding-inline: 25px;
   border-radius: 999px;
-  background-color: color-mix(in srgb, var(--glass-tint) var(--glass-tint-amount), transparent);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  background-color: color-mix(in srgb, var(--glass-tint, #fffdfa) var(--glass-tint-amount, 52%), transparent);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
   /* Eleven inset layers: a hairline rim, three highlight passes down the lit
      edge, three shade passes on the shadowed edge, then two ambient drops.
      All static, so they cost one paint and nothing per frame. */
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light) * 10%), transparent),
-    inset 1.8px 3px 0 -2px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light) * 90%), transparent),
-    inset -2px -2px 0 -2px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light) * 80%), transparent),
-    inset -3px -8px 1px -6px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light) * 60%), transparent),
-    inset -.3px -1px 4px 0 color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark) * 12%), transparent),
-    inset -1.5px 2.5px 0 -2px color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark) * 20%), transparent),
-    inset 0 3px 4px -2px color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark) * 20%), transparent),
-    inset 2px -6.5px 1px -4px color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark) * 10%), transparent),
-    0 1px 5px 0 color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark) * 10%), transparent),
-    0 6px 16px 0 color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light, 1) * 10%), transparent),
+    inset 1.8px 3px 0 -2px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light, 1) * 90%), transparent),
+    inset -2px -2px 0 -2px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light, 1) * 80%), transparent),
+    inset -3px -8px 1px -6px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex-light, 1) * 60%), transparent),
+    inset -.3px -1px 4px 0 color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark, 1) * 12%), transparent),
+    inset -1.5px 2.5px 0 -2px color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark, 1) * 20%), transparent),
+    inset 0 3px 4px -2px color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark, 1) * 20%), transparent),
+    inset 2px -6.5px 1px -4px color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark, 1) * 10%), transparent),
+    0 1px 5px 0 color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark, 1) * 10%), transparent),
+    0 6px 16px 0 color-mix(in srgb, var(--glass-dark) calc(var(--glass-reflex-dark, 1) * 8%), transparent);
   transition: background-color .4s var(--ease), box-shadow .4s var(--ease);
 }
 .header__pill > * { position: relative; }
@@ -385,14 +376,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    per-frame backdrop filter. Everything above still applies without it. */
 @media (min-width: 1024px) {
   .has-glass-refraction .header__pill {
-    -webkit-backdrop-filter: blur(6px) url(#mpro-glass) saturate(var(--glass-saturation));
-    backdrop-filter: blur(6px) url(#mpro-glass) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lens, 16px)) url(#mpro-glass) saturate(var(--glass-saturation, 180%));
+    backdrop-filter: blur(var(--glass-blur-lens, 16px)) url(#mpro-glass) saturate(var(--glass-saturation, 180%));
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .has-glass-refraction .header__pill {
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
+    backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
   }
 }
 .glass-filter-defs {
