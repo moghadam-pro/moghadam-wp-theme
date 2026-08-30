@@ -6,7 +6,7 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 
 | | |
 |---|---|
-| **Version** | 1.4.0 |
+| **Version** | 1.5.0 |
 | **Requires WordPress** | 6.0+ |
 | **Requires PHP** | 7.4+ |
 | **License** | [GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html) |

@@ -9,7 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'MOGHADAM_VERSION' ) ) {
-	define( 'MOGHADAM_VERSION', '1.4.0' );
+	define( 'MOGHADAM_VERSION', '1.5.0' );
 }
 
 if ( ! defined( 'MOGHADAM_DIR' ) ) {
@@ -35,6 +35,7 @@ require_once MOGHADAM_DIR . '/inc/social.php';
 require_once MOGHADAM_DIR . '/inc/case-studies.php';
 require_once MOGHADAM_DIR . '/inc/portfolio.php';
 require_once MOGHADAM_DIR . '/inc/post-sidebar.php';
+require_once MOGHADAM_DIR . '/inc/single-post.php';
 require_once MOGHADAM_DIR . '/inc/customizer.php';
 require_once MOGHADAM_DIR . '/inc/home/customizer-home.php';
 

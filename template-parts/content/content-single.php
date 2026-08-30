@@ -2,6 +2,10 @@
 /**
  * Template part for displaying a single post.
  *
+ * The date and byline stay in the markup for search engines and for the
+ * microformat classes, but are hidden: the sidebar already carries all of it
+ * and printing it twice only competes with the title.
+ *
  * @package Moghadam
  */
 
@@ -12,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 
 		<?php if ( 'post' === get_post_type() ) : ?>
-			<div class="entry-meta">
+			<div class="entry-meta entry-meta--hidden">
 				<?php
 				moghadam_posted_on();
 				moghadam_posted_by();
@@ -35,8 +39,4 @@ defined( 'ABSPATH' ) || exit;
 		);
 		?>
 	</div>
-
-	<footer class="entry-footer">
-		<?php moghadam_entry_footer(); ?>
-	</footer>
 </article><!-- #post-<?php the_ID(); ?> -->

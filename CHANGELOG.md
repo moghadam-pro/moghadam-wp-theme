@@ -5,6 +5,41 @@ All notable changes to this theme are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-08-30
+
+### Added
+
+- **Related posts** under every article. Each other post is scored on what it
+  shares with the one being read — a tag in common is worth three, a category
+  one — and the four best are shown, newest first on a tie. It is one query
+  against the term relationships table however large the site gets, and it
+  falls back to the newest posts in the same categories when a post has too
+  few relatives (`moghadam_related_posts()`).
+- **Comment spam guard**, entirely in the theme: a field bots fill in and
+  people never see, plus a signed timestamp so a comment posted within four
+  seconds of the page loading is refused. Nothing is sent anywhere and nothing
+  about the commenter is stored.
+- A **previous/next** pair rebuilt as two cards carrying the featured image.
+
+### Changed
+
+- Article typography reworked: the space above a heading now belongs to the
+  heading, quotes carry an accent rule, code blocks and inline code get a
+  surface and a border, lists have real markers and leading, and figures and
+  captions are spaced as a unit.
+- Archives, the blog index and search results are a row listing with a small
+  thumbnail, date, category, title and trimmed excerpt.
+- The sidebar sticks alongside a long article instead of scrolling away.
+- Short pages fill the window so the footer stays at the bottom.
+
+### Removed
+
+- The date and byline under a single post title are now visually hidden. They
+  stay in the markup with their microformat classes for search engines; the
+  sidebar is where a reader sees them.
+- The categories and tags repeated below a post; the sidebar already lists
+  them.
+
 ## [1.4.0] - 2026-08-30
 
 ### Added

@@ -18,13 +18,8 @@ $has_sidebar = moghadam_has_sidebar();
 				the_post();
 
 				get_template_part( 'template-parts/content/content', 'single' );
-
-				the_post_navigation(
-					array(
-						'prev_text' => '<span class="nav-subtitle">' . esc_html__( 'Previous:', 'moghadam' ) . '</span> <span class="nav-title">%title</span>',
-						'next_text' => '<span class="nav-subtitle">' . esc_html__( 'Next:', 'moghadam' ) . '</span> <span class="nav-title">%title</span>',
-					)
-				);
+				get_template_part( 'template-parts/post/pagination' );
+				get_template_part( 'template-parts/post/related' );
 
 				if ( comments_open() || get_comments_number() ) {
 					comments_template();
