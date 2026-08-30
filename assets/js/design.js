@@ -78,17 +78,24 @@
     // itself when the window grows again.
     hero.classList.remove('is-compact');
 
+    var body = hero.querySelector('.hero__body');
+    var content = hero.querySelector('.hero__content');
+    var foot = hero.querySelector('.hero__foot');
+    if (!body || !content) return;
+
+    // Only what is actually in flow. The guide lines and the in-hero header
+    // are absolutely positioned, so their offsetHeight is the whole hero and
+    // counting them would fail the test on any screen. The header's space is
+    // already inside the body's top padding.
+    var pad = getComputedStyle(body);
+    var needed = content.offsetHeight
+      + (parseFloat(pad.paddingTop) || 0)
+      + (parseFloat(pad.paddingBottom) || 0)
+      + (foot ? foot.offsetHeight : 0);
+
     var available = parseFloat(getComputedStyle(hero).minHeight) || hero.clientHeight;
-    var needed = 0;
 
-    Array.prototype.forEach.call(hero.children, function (child) {
-      var box = getComputedStyle(child);
-      needed += child.offsetHeight
-        + (parseFloat(box.marginTop) || 0)
-        + (parseFloat(box.marginBottom) || 0);
-    });
-
-    if (needed > available) {
+    if (needed > available - 8) {
       hero.classList.add('is-compact');
     }
   }

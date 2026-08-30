@@ -1081,7 +1081,7 @@ a.link-accent:hover { color: var(--yellow); }
 .sidebar-categories a:hover { color: var(--yellow); }
 .sidebar-categories__count { color: var(--text-faint); font-size: var(--fs-meta); }
 
-.sidebar-block--search form { display: flex; gap: 8px; }
+.sidebar-block--search form { display: flex; gap: 8px; align-items: stretch; }
 .sidebar-block--search label { flex: 1 1 auto; min-width: 0; }
 .sidebar-block--search input[type="search"] {
 	width: 100%;
@@ -1093,6 +1093,7 @@ a.link-accent:hover { color: var(--yellow); }
 	border-radius: var(--radius);
 }
 .sidebar-block--search input[type="submit"] {
+	flex: none;
 	padding: 10px 14px;
 	font-family: var(--font-ui);
 	font-size: var(--fs-btn);
