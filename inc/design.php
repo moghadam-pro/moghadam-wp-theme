@@ -164,7 +164,7 @@ add_action( 'wp_head', 'moghadam_design_head_script', 1 );
  * @return bool
  */
 function moghadam_is_home_layout() {
-	return is_front_page() || is_page_template( 'page-templates/template-home.php' );
+	return is_front_page();
 }
 
 /**

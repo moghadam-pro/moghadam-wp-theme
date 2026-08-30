@@ -5,6 +5,42 @@ All notable changes to this theme are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-08-30
+
+### Added
+
+- **Post sidebar** built from blocks rather than widgets, so the same set can
+  be the site default and still be overridden on any single post
+  (`inc/post-sidebar.php`). Ships with About this post (date, author and
+  avatar, reading time, comment count, categories and tags), Search, All
+  categories, and a per-post free text block.
+- A **Sidebar** box on posts and pages: keep the site default or choose the
+  blocks for that post alone.
+- **Appearance > Customize > Post Sidebar** for the site-wide default.
+- New pages start on the **Full Width** template.
+
+### Changed
+
+- Single posts and default-template pages lay the content out beside the
+  sidebar instead of stacking an unstyled widget area underneath it.
+- The hero drops its terminal block when its own content is taller than the
+  space it has. It is a fit test, not a breakpoint: a short laptop screen
+  needs it and a phone does not.
+
+### Removed
+
+- The **Theme** style guide template and `inc/style-guide.php`.
+- The **Home Page** template. The front page is rendered by `front-page.php`;
+  the template only duplicated it.
+
+### Fixed
+
+- Reveal animations on short pages never played. A trigger at `top 88%` on a
+  page barely taller than the window asks for a scroll position past the end
+  of the document, so the footer's rule, colophon and social row sat at
+  opacity 0 forever. Anything unreachable now plays as soon as the layout
+  settles.
+
 ## [1.3.0] - 2026-08-29
 
 ### Added

@@ -21,7 +21,6 @@ function moghadam_get_layouts() {
 		'default'    => __( 'Content width, sidebar allowed.', 'moghadam' ),
 		'full-width' => __( 'Container width, no sidebar.', 'moghadam' ),
 		'home'       => __( 'Container width, no sidebar, home page hooks.', 'moghadam' ),
-		'styleguide' => __( 'Container width, no sidebar, style guide output.', 'moghadam' ),
 	);
 }
 
@@ -76,21 +75,15 @@ function moghadam_main_class( $layout = 'default', $extra = array() ) {
  * @return bool
  */
 function moghadam_has_sidebar() {
-	$has_sidebar = is_active_sidebar( 'sidebar-1' ) && ! moghadam_is_canvas();
-
-	if ( is_page() && ! is_page_template() ) {
-		// Default page template keeps the sidebar.
-		$has_sidebar = $has_sidebar && true;
-	} elseif ( is_page_template() ) {
-		$has_sidebar = false;
-	}
-
 	/**
 	 * Filters whether the sidebar renders.
+	 *
+	 * The post sidebar owns this now: it is built from blocks rather than
+	 * widgets so it can be overridden per post.
 	 *
 	 * @since 1.1.0
 	 *
 	 * @param bool $has_sidebar Whether to render the sidebar.
 	 */
-	return (bool) apply_filters( 'moghadam_has_sidebar', $has_sidebar );
+	return (bool) apply_filters( 'moghadam_has_sidebar', moghadam_has_post_sidebar() );
 }

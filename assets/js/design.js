@@ -57,10 +57,63 @@
     // A plugin may inject something above the hero; that height has to come
     // off, or the bottom of the hero ends up below the fold.
     var hero = document.querySelector('.hero');
-    if (hero) {
-      var offset = Math.max(0, hero.getBoundingClientRect().top + (window.scrollY || 0));
-      document.documentElement.style.setProperty('--vh-hero', Math.max(480, vh - offset) + 'px');
+    if (!hero) return;
+
+    var offset = Math.max(0, hero.getBoundingClientRect().top + (window.scrollY || 0));
+    document.documentElement.style.setProperty('--vh-hero', Math.max(480, vh - offset) + 'px');
+
+    fitHero(hero);
+  }
+
+  /* On a short screen the hero's own content is taller than the space it has,
+     and the bottom of it — the buttons and the scroll hint — falls off. The
+     terminal is the one decorative block in there, so it goes first. This is a
+     fit test rather than a breakpoint: a laptop at 1440x700 needs it and a
+     phone at 390x844 does not. */
+  function fitHero(hero) {
+    var terminal = hero.querySelector('.terminal');
+    if (!terminal) return;
+
+    // Measure with the terminal back in place, or the test can never undo
+    // itself when the window grows again.
+    hero.classList.remove('is-compact');
+
+    var available = parseFloat(getComputedStyle(hero).minHeight) || hero.clientHeight;
+    var needed = 0;
+
+    Array.prototype.forEach.call(hero.children, function (child) {
+      var box = getComputedStyle(child);
+      needed += child.offsetHeight
+        + (parseFloat(box.marginTop) || 0)
+        + (parseFloat(box.marginBottom) || 0);
+    });
+
+    if (needed > available) {
+      hero.classList.add('is-compact');
     }
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 0d. Reveals that can never be scrolled to
+   *
+   * A trigger placed at 'top 88%' on a page barely taller than the window
+   * asks for a scroll position past the end of the document, so it would
+   * never fire and its block would sit at opacity 0 forever. Short inner
+   * pages hit this on the footer every time.
+   * ------------------------------------------------------------------ */
+  var PENDING = [];
+
+  function playUnreachable() {
+    if (!PENDING.length) return;
+
+    var max = ScrollTrigger.maxScroll(window);
+
+    PENDING = PENDING.filter(function (entry) {
+      if (entry.st.start <= max) return true;
+      entry.run();
+      entry.st.kill();
+      return false;
+    });
   }
   measureViewport();
 
@@ -246,17 +299,27 @@
      rather than the whole section firing at once. */
   function revealSection(section) {
     if (REDUCED) return;   // nothing was hidden, nothing to play
+
     $$('[data-anim]', section).forEach(function (el, i) {
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 88%',
-        once: true,
-        onEnter: function () {
-          play(el, gsap.timeline({
-            delay: Math.min(i * .06, .3),
-            defaults: { force3D: true }
-          }), 0);
-        }
+      var played = false;
+
+      function run() {
+        if (played) return;
+        played = true;
+        play(el, gsap.timeline({
+          delay: Math.min(i * .06, .3),
+          defaults: { force3D: true }
+        }), 0);
+      }
+
+      PENDING.push({
+        run: run,
+        st: ScrollTrigger.create({
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+          onEnter: run
+        })
       });
     });
   }
@@ -543,6 +606,7 @@
     // NOTE: never put a transform on #rest — it would become the containing
     // block for ScrollTrigger's position:fixed pin inside section 05.
     ScrollTrigger.refresh();
+    playUnreachable();
     lenis.resize();   // pin spacing just changed the document height
   }
 
@@ -613,8 +677,16 @@
       initDeferred(document.body);
     }
 
+    // Anything that can never be scrolled to plays as soon as the layout is
+    // final, whichever pass settles it.
+    ScrollTrigger.addEventListener('refreshInit', function () {});
+    ScrollTrigger.addEventListener('refresh', playUnreachable);
+
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+      document.fonts.ready.then(function () {
+        measureViewport();
+        ScrollTrigger.refresh();
+      });
     }
     window.addEventListener('resize', function () {
       clearTimeout(window.__mproRs);

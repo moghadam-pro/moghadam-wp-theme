@@ -6,7 +6,7 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 
 | | |
 |---|---|
-| **Version** | 1.3.0 |
+| **Version** | 1.4.0 |
 | **Requires WordPress** | 6.0+ |
 | **Requires PHP** | 7.4+ |
 | **License** | [GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html) |
@@ -15,7 +15,7 @@ No frameworks, no build step, no bloat — just semantic HTML5, accessible marku
 ## Features
 
 - Semantic HTML5 templates covering the full WordPress template hierarchy
-- Five page templates, including a Canvas template for hand-written markup
+- Three page templates: Full Width (the default for new pages), Canvas for hand-written markup, and the Default layout with a sidebar
 - Fully responsive layout with a mobile navigation toggle
 - Right-to-left (RTL) ready — built on CSS logical properties
 - Theme settings screen with editable design tokens for colors, typography and spacing

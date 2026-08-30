@@ -1,16 +1,13 @@
 <?php
 /**
- * The sidebar containing the main widget area.
+ * The sidebar.
+ *
+ * Built from blocks rather than widgets so the same set can be the site
+ * default and still be overridden on any single post. See inc/post-sidebar.php.
  *
  * @package Moghadam
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! moghadam_has_sidebar() ) {
-	return;
-}
-?>
-<aside id="secondary" class="widget-area">
-	<?php dynamic_sidebar( 'sidebar-1' ); ?>
-</aside><!-- #secondary -->
+moghadam_post_sidebar();
