@@ -89,7 +89,17 @@
 
     if (!chromium) return;
 
-    document.documentElement.classList.add('has-glass-refraction');
+    // Wait for the lens map. Until it decodes the filter resolves to nothing,
+    // which would paint the bar with no backdrop at all on a slow connection.
+    var href = document.querySelector('#mpro-glass feImage');
+    href = href && (href.getAttribute('href') || href.getAttribute('xlink:href'));
+    if (!href) return;
+
+    var probe = new Image();
+    probe.onload = function () {
+      document.documentElement.classList.add('has-glass-refraction');
+    };
+    probe.src = href;
   })();
 
   /* ------------------------------------------------------------------ *
