@@ -346,9 +346,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   height: 68px;
   padding-inline: 25px;
   border-radius: 999px;
-  background-color: color-mix(in srgb, var(--glass-tint, #fffdfa) var(--glass-tint-amount, 52%), transparent);
-  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
-  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
+  background-color: color-mix(in srgb, var(--glass-tint, #fffdfa) var(--glass-tint-amount, 66%), transparent);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 32px)) saturate(var(--glass-saturation, 180%));
+  backdrop-filter: blur(var(--glass-blur, 32px)) saturate(var(--glass-saturation, 180%));
   /* Eleven inset layers: a hairline rim, three highlight passes down the lit
      edge, three shade passes on the shadowed edge, then two ambient drops.
      All static, so they cost one paint and nothing per frame. */
@@ -376,14 +376,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    per-frame backdrop filter. Everything above still applies without it. */
 @media (min-width: 1024px) {
   .has-glass-refraction .header__pill {
-    -webkit-backdrop-filter: blur(var(--glass-blur-lens, 16px)) url(#mpro-glass) saturate(var(--glass-saturation, 180%));
-    backdrop-filter: blur(var(--glass-blur-lens, 16px)) url(#mpro-glass) saturate(var(--glass-saturation, 180%));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lens, 26px)) url(#mpro-glass) saturate(var(--glass-saturation, 180%));
+    backdrop-filter: blur(var(--glass-blur-lens, 26px)) url(#mpro-glass) saturate(var(--glass-saturation, 180%));
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .has-glass-refraction .header__pill {
-    -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
-    backdrop-filter: blur(var(--glass-blur, 24px)) saturate(var(--glass-saturation, 180%));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 32px)) saturate(var(--glass-saturation, 180%));
+    backdrop-filter: blur(var(--glass-blur, 32px)) saturate(var(--glass-saturation, 180%));
   }
 }
 .glass-filter-defs {
