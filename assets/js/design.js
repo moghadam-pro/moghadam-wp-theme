@@ -68,6 +68,31 @@
   window.MPRO = { lenis: lenis };
 
   /* ------------------------------------------------------------------ *
+   * 0c. Glass refraction
+   *
+   * url() inside backdrop-filter only resolves in Chromium. Safari and
+   * Firefox parse it and then paint nothing, which would silently drop the
+   * blur too, so the class is only added where the filter really renders and
+   * the plain blur stays the default everywhere else.
+   * ------------------------------------------------------------------ */
+  (function glassRefraction() {
+    if (!CFG.glass || REDUCED) return;
+    if (!document.getElementById('mpro-glass')) return;
+    if (!(window.CSS && CSS.supports && CSS.supports('backdrop-filter', 'blur(1px)'))) return;
+
+    // Chromium is the only engine that resolves an SVG filter reference in
+    // backdrop-filter; everything else keeps the plain blur.
+    var brands = navigator.userAgentData && navigator.userAgentData.brands;
+    var chromium = brands
+      ? brands.some(function (b) { return b.brand === 'Chromium'; })
+      : (/Chrome|Chromium|Edg/.test(navigator.userAgent) && !/OPR|Firefox/.test(navigator.userAgent));
+
+    if (!chromium) return;
+
+    document.documentElement.classList.add('has-glass-refraction');
+  })();
+
+  /* ------------------------------------------------------------------ *
    * 1. Theme toggle
    * ------------------------------------------------------------------ */
   $$('[data-theme-toggle]').forEach(function (btn) {

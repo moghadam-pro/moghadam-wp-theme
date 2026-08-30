@@ -122,6 +122,7 @@ function moghadam_design_scripts() {
 		'moghadamDesign',
 		array(
 			'marqueeSpeed' => max( 4, (int) moghadam_home( 'marquee', 'speed' ) ),
+			'glass'        => moghadam_glass_refraction_enabled(),
 			'clock'        => array(
 				'timeZone' => (string) moghadam_home( 'hero', 'clock_timezone' ),
 				'suffix'   => (string) moghadam_home( 'hero', 'clock_suffix' ),
@@ -176,6 +177,59 @@ function moghadam_is_home_layout() {
  */
 function moghadam_main_menu_location() {
 	return ( moghadam_is_home_layout() && has_nav_menu( 'home' ) ) ? 'home' : 'primary';
+}
+
+/**
+ * The SVG filter behind the sticky header's refraction.
+ *
+ * feImage carries a baked lens map (a rounded rectangle whose red channel
+ * ramps left to right and green top to bottom); feDisplacementMap reads those
+ * two channels as X and Y offsets, so the backdrop bends outward at the edges
+ * of the bar the way it would through real glass. primitiveUnits are relative
+ * to the element, so one map serves every bar size.
+ *
+ * The map is a separate 12 KB WebP rather than a base64 blob, so it is cached
+ * once instead of adding to every page's HTML, and the markup here is a few
+ * hundred bytes. Only Chromium resolves url() inside backdrop-filter, so
+ * design.js decides whether it is used at all.
+ *
+ * Adapted from Den Dionigi's "Apple Liquid glass switcher" pen.
+ */
+function moghadam_glass_filter() {
+	if ( ! moghadam_glass_refraction_enabled() ) {
+		return;
+	}
+	?>
+	<svg class="glass-filter-defs" aria-hidden="true" focusable="false" width="0" height="0">
+		<filter id="mpro-glass" primitiveUnits="objectBoundingBox">
+			<feImage result="map" width="100%" height="100%" x="0" y="0"
+				href="<?php echo esc_url( MOGHADAM_URI . '/assets/img/glass-displacement.webp' ); ?>" />
+			<feGaussianBlur in="SourceGraphic" stdDeviation="0.03" result="blur" />
+			<feDisplacementMap in="blur" in2="map" scale="0.42"
+				xChannelSelector="R" yChannelSelector="G" />
+		</filter>
+	</svg>
+	<?php
+}
+add_action( 'wp_body_open', 'moghadam_glass_filter', 2 );
+
+/**
+ * Whether to ship the refraction filter at all.
+ *
+ * Returning false drops the SVG, the capability probe and the image request,
+ * leaving the sticky bar on its plain blur.
+ *
+ * @return bool
+ */
+function moghadam_glass_refraction_enabled() {
+	/**
+	 * Filters whether the sticky header's glass refraction is offered.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param bool $enabled Whether to print the filter.
+	 */
+	return (bool) apply_filters( 'moghadam_glass_refraction', true );
 }
 
 /**
