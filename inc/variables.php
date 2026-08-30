@@ -35,56 +35,348 @@ function moghadam_variables_schema() {
 
 	$schema = array(
 		'colors'     => array(
-			'label'       => __( 'Colors', 'moghadam' ),
-			'description' => __( 'Each color is defined twice, once per mode. Both sets are always written to the page; which one applies is decided at runtime.', 'moghadam' ),
+			'tab'         => 'colors',
+			'label'       => __( 'Semantic Colors', 'moghadam' ),
+			'description' => __( 'What the page is actually painted with. Each is defined twice, once per mode; both sets are written to the page and the runtime toggle decides which applies.', 'moghadam' ),
 			'per_mode'    => true,
 			'control'     => 'color',
 			'tokens'      => array(
-				'accent'  => array(
-					'var'   => '--moghadam-color-accent',
+				'accent'      => array(
+					'var'   => '--yellow',
+					'alias' => array( '--moghadam-color-accent' ),
 					'label' => __( 'Accent', 'moghadam' ),
-					'usage' => __( 'Links, buttons, focus rings, active menu items, blockquote border.', 'moghadam' ),
-					'light' => '#2563eb',
-					'dark'  => '#6ea8fe',
+					'usage' => __( 'Buttons, the marquee bar, active filters, link hovers, the beam of light on the grid.', 'moghadam' ),
+					'light' => '#eeaa00',
+					'dark'  => '#eeaa00',
 				),
-				'text'    => array(
-					'var'   => '--moghadam-color-text',
-					'label' => __( 'Text', 'moghadam' ),
-					'usage' => __( 'Body copy, headings, navigation labels.', 'moghadam' ),
-					'light' => '#1f2328',
-					'dark'  => '#e6edf3',
+				'link'        => array(
+					'var'   => '--veryperi-400',
+					'label' => __( 'Link', 'moghadam' ),
+					'usage' => __( 'The name in the hero greeting and highlighted phrases in body copy.', 'moghadam' ),
+					'light' => '#7374bf',
+					'dark'  => '#9394d6',
 				),
-				'muted'   => array(
-					'var'   => '--moghadam-color-muted',
-					'label' => __( 'Muted', 'moghadam' ),
-					'usage' => __( 'Entry meta, captions, footer text, secondary copy.', 'moghadam' ),
-					'light' => '#6a737d',
-					'dark'  => '#8b949e',
-				),
-				'background' => array(
-					'var'   => '--moghadam-color-bg',
+				'background'  => array(
+					'var'   => '--bg',
+					'alias' => array( '--moghadam-color-bg' ),
 					'label' => __( 'Background', 'moghadam' ),
-					'usage' => __( 'Page background, input fields, mobile menu panel.', 'moghadam' ),
-					'light' => '#ffffff',
-					'dark'  => '#0d1117',
+					'usage' => __( 'The page itself.', 'moghadam' ),
+					'light' => '#fffdfa',
+					'dark'  => '#0b0b0c',
 				),
-				'surface' => array(
-					'var'   => '--moghadam-color-surface',
+				'background-inverse' => array(
+					'var'   => '--bg-inverse',
+					'label' => __( 'Inverted background', 'moghadam' ),
+					'usage' => __( 'The dark bands: the primary button and the closing call to action.', 'moghadam' ),
+					'light' => '#111112',
+					'dark'  => '#fffdfa',
+				),
+				'text'        => array(
+					'var'   => '--text',
+					'alias' => array( '--moghadam-color-text' ),
+					'label' => __( 'Text', 'moghadam' ),
+					'usage' => __( 'Headings and anything that has to carry weight.', 'moghadam' ),
+					'light' => '#111112',
+					'dark'  => '#f6f6f7',
+				),
+				'text-strong' => array(
+					'var'   => '--text-strong',
+					'label' => __( 'Text, strong', 'moghadam' ),
+					'usage' => __( 'The hero greeting, one step softer than headings.', 'moghadam' ),
+					'light' => '#2a2a2d',
+					'dark'  => '#e9e9eb',
+				),
+				'text-body'   => array(
+					'var'   => '--text-body',
+					'label' => __( 'Text, body', 'moghadam' ),
+					'usage' => __( 'Paragraphs, menu labels, the skills list.', 'moghadam' ),
+					'light' => '#454549',
+					'dark'  => '#b6b6bc',
+				),
+				'text-muted'  => array(
+					'var'   => '--text-muted',
+					'alias' => array( '--moghadam-color-muted' ),
+					'label' => __( 'Text, muted', 'moghadam' ),
+					'usage' => __( 'The header status line, the clock, social icons.', 'moghadam' ),
+					'light' => '#77777e',
+					'dark'  => '#8a8a92',
+				),
+				'text-faint'  => array(
+					'var'   => '--text-faint',
+					'label' => __( 'Text, faint', 'moghadam' ),
+					'usage' => __( 'Section numbers and labels, corner links, footer legal line.', 'moghadam' ),
+					'light' => '#939399',
+					'dark'  => '#6d6d75',
+				),
+				'text-ghost'  => array(
+					'var'   => '--text-ghost',
+					'label' => __( 'Text, ghost', 'moghadam' ),
+					'usage' => __( 'The oversized step number behind How I Work.', 'moghadam' ),
+					'light' => '#f2f2f3',
+					'dark'  => '#1b1b1e',
+				),
+				'surface'     => array(
+					'var'   => '--card',
+					'alias' => array( '--moghadam-color-surface' ),
 					'label' => __( 'Surface', 'moghadam' ),
-					'usage' => __( 'Code blocks, inline code, raised areas.', 'moghadam' ),
-					'light' => '#f6f8fa',
-					'dark'  => '#161b22',
+					'usage' => __( 'Visual work cards, code blocks, raised areas.', 'moghadam' ),
+					'light' => '#f8f8f8',
+					'dark'  => '#131315',
 				),
-				'border'  => array(
-					'var'   => '--moghadam-color-border',
-					'label' => __( 'Border', 'moghadam' ),
-					'usage' => __( 'Header and footer rules, table cells, input outlines, post separators.', 'moghadam' ),
-					'light' => '#e1e4e8',
-					'dark'  => '#30363d',
+				'surface-hover' => array(
+					'var'   => '--card-hover',
+					'label' => __( 'Surface, hover', 'moghadam' ),
+					'usage' => __( 'A work card under the cursor.', 'moghadam' ),
+					'light' => '#e5e5e6',
+					'dark'  => '#1d1d21',
+				),
+				'border'      => array(
+					'var'   => '--line',
+					'alias' => array( '--moghadam-color-border' ),
+					'label' => __( 'Hairline', 'moghadam' ),
+					'usage' => __( 'Section rules, separators, ghost button outlines.', 'moghadam' ),
+					'light' => '#e5e5e6',
+					'dark'  => '#26262a',
+				),
+				'border-strong' => array(
+					'var'   => '--line-strong',
+					'label' => __( 'Hairline, strong', 'moghadam' ),
+					'usage' => __( 'The dotted footer rule and the dots between skills.', 'moghadam' ),
+					'light' => '#c8c8cb',
+					'dark'  => '#33333a',
+				),
+				'grid-line'   => array(
+					'var'     => '--grid-line',
+					'label'   => __( 'Background grid', 'moghadam' ),
+					'usage'   => __( 'The twelve guide lines behind every section. Takes any colour value, so it can carry an alpha.', 'moghadam' ),
+					'control' => 'text',
+					'palette' => false,
+					'light'   => 'rgba(17, 17, 18, .055)',
+					'dark'    => 'rgba(255, 255, 255, .05)',
+				),
+				'beam'        => array(
+					'var'     => '--beam',
+					'label'   => __( 'Beam', 'moghadam' ),
+					'usage'   => __( 'Head of the light that travels down a guide line.', 'moghadam' ),
+					'control' => 'text',
+					'palette' => false,
+					'light'   => 'rgba(238, 170, 0, .9)',
+					'dark'    => 'rgba(255, 255, 255, .85)',
+				),
+				'beam-soft'   => array(
+					'var'     => '--beam-soft',
+					'label'   => __( 'Beam halo', 'moghadam' ),
+					'usage'   => __( 'The glow either side of that light.', 'moghadam' ),
+					'control' => 'text',
+					'palette' => false,
+					'light'   => 'rgba(238, 170, 0, .22)',
+					'dark'    => 'rgba(255, 255, 255, .18)',
+				),
+			),
+		),
+		'palette'    => array(
+			'tab'         => 'colors',
+			'description' => __( 'The raw ramp the semantic colours are drawn from. Shared by both modes.', 'moghadam' ),
+			'label'       => __( 'Palette', 'moghadam' ),
+			'per_mode'    => false,
+			'control'     => 'color',
+			'tokens'      => array(
+				'orange' => array(
+					'var'     => '--orange',
+					'label'   => __( 'Orange', 'moghadam' ),
+					'usage'   => __( 'The plate behind the About portrait.', 'moghadam' ),
+					'palette' => false,
+					'default' => '#e35b0c',
+				),
+				'moon'   => array(
+					'var'     => '--moon',
+					'label'   => __( 'Moon', 'moghadam' ),
+					'usage'   => __( 'The theme switch icon once dark mode is on.', 'moghadam' ),
+					'palette' => false,
+					'default' => '#9fbafe',
+				),
+				'heart'  => array(
+					'var'     => '--heart',
+					'label'   => __( 'Heart', 'moghadam' ),
+					'usage'   => __( 'The heart in the footer colophon.', 'moghadam' ),
+					'palette' => false,
+					'default' => '#e8422f',
+				),
+			),
+		),
+		'typography' => array(
+			'tab'         => 'typography',
+			'label'       => __( 'Typography', 'moghadam' ),
+			'description' => __( 'Shared by both modes. Font stacks accept any CSS font-family value; keep a system fallback at the end.', 'moghadam' ),
+			'per_mode'    => false,
+			'control'     => 'text',
+			'tokens'      => array(
+				'font-display'   => array(
+					'var'     => '--font-display',
+					'alias'   => array( '--moghadam-font-heading' ),
+					'label'   => __( 'Display font', 'moghadam' ),
+					'usage'   => __( 'Every headline: the hero, section titles, project names, step titles.', 'moghadam' ),
+					'default' => '"Averia Sans Libre", "Trebuchet MS", sans-serif',
+				),
+				'font-mono'      => array(
+					'var'     => '--font-mono',
+					'alias'   => array( '--moghadam-font-body', '--moghadam-font-mono' ),
+					'label'   => __( 'Body font', 'moghadam' ),
+					'usage'   => __( 'The monospace face that carries all body copy, menus and metadata.', 'moghadam' ),
+					'default' => '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+				),
+				'font-ui'        => array(
+					'var'     => '--font-ui',
+					'label'   => __( 'Interface font', 'moghadam' ),
+					'usage'   => __( 'Button labels only.', 'moghadam' ),
+					'default' => '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+				),
+				'fs-display'     => array(
+					'var'     => '--fs-display',
+					'label'   => __( 'Hero headline', 'moghadam' ),
+					'usage'   => __( 'The H1. Steps down at each breakpoint.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '48px',
+				),
+				'fs-h3'          => array(
+					'var'     => '--fs-h3',
+					'label'   => __( 'Large headline', 'moghadam' ),
+					'usage'   => __( 'How I Work step titles.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '40px',
+				),
+				'fs-h2'          => array(
+					'var'     => '--fs-h2',
+					'label'   => __( 'Section headline', 'moghadam' ),
+					'usage'   => __( 'About quote, case studies title, call to action.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '36px',
+				),
+				'fs-case'        => array(
+					'var'     => '--fs-case',
+					'label'   => __( 'Project name', 'moghadam' ),
+					'usage'   => __( 'The names in the case study rows.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '32px',
+				),
+				'fs-lead'        => array(
+					'var'     => '--fs-lead',
+					'label'   => __( 'Lead', 'moghadam' ),
+					'usage'   => __( 'The hero greeting line.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '24px',
+				),
+				'fs-btn'         => array(
+					'var'     => '--fs-btn',
+					'label'   => __( 'Button label', 'moghadam' ),
+					'usage'   => __( 'Text inside buttons.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '15px',
+				),
+				'fs-body'        => array(
+					'var'     => '--fs-body',
+					'alias'   => array( '--moghadam-font-size-base' ),
+					'label'   => __( 'Body', 'moghadam' ),
+					'usage'   => __( 'Paragraphs, menus, lists. The base of the whole scale.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '14px',
+				),
+				'lh-body'        => array(
+					'var'     => '--lh-body',
+					'label'   => __( 'Body leading', 'moghadam' ),
+					'usage'   => __( 'Line height for body copy. Deliberately generous.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '28px',
+				),
+				'fs-meta'        => array(
+					'var'     => '--fs-meta',
+					'label'   => __( 'Metadata', 'moghadam' ),
+					'usage'   => __( 'Section numbers and labels, the clock, the footer legal line.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '12px',
+				),
+				'line-height'    => array(
+					'var'     => '--moghadam-line-height',
+					'label'   => __( 'Prose leading', 'moghadam' ),
+					'usage'   => __( 'Unitless line height for post and page content.', 'moghadam' ),
+					'control' => 'size',
+					'default' => '1.7',
+				),
+			),
+		),
+		'layout'     => array(
+			'tab'         => 'spacing',
+			'label'       => __( 'Spacing and sizing', 'moghadam' ),
+			'description' => __( 'Shared by both modes. The container and the section padding set the rhythm of the whole page.', 'moghadam' ),
+			'per_mode'    => false,
+			'control'     => 'size',
+			'tokens'      => array(
+				'container'   => array(
+					'var'     => '--container',
+					'alias'   => array( '--moghadam-container' ),
+					'label'   => __( 'Container', 'moghadam' ),
+					'usage'   => __( 'Width of the content column and of the twelve background guide lines.', 'moghadam' ),
+					'default' => '1200px',
+				),
+				'gutter'      => array(
+					'var'     => '--gutter',
+					'label'   => __( 'Gutter', 'moghadam' ),
+					'usage'   => __( 'Inner padding of the container, and the grid gap between work cards.', 'moghadam' ),
+					'default' => '16px',
+				),
+				'section-pad' => array(
+					'var'     => '--section-pad',
+					'label'   => __( 'Section padding', 'moghadam' ),
+					'usage'   => __( 'Fixed space above and below every numbered section.', 'moghadam' ),
+					'default' => '120px',
+				),
+				'radius'      => array(
+					'var'     => '--radius',
+					'alias'   => array( '--moghadam-radius' ),
+					'label'   => __( 'Corner radius', 'moghadam' ),
+					'usage'   => __( 'Buttons and work cards.', 'moghadam' ),
+					'default' => '8px',
+				),
+				'content'     => array(
+					'var'     => '--moghadam-content',
+					'label'   => __( 'Reading measure', 'moghadam' ),
+					'usage'   => __( 'Width of prose on posts and pages.', 'moghadam' ),
+					'default' => '800px',
+				),
+				'space-xs'    => array(
+					'var'     => '--moghadam-space-xs',
+					'label'   => __( 'Space, extra small', 'moghadam' ),
+					'usage'   => __( 'Tight gaps inside post and page content.', 'moghadam' ),
+					'default' => '0.5rem',
+				),
+				'space-sm'    => array(
+					'var'     => '--moghadam-space-sm',
+					'label'   => __( 'Space, small', 'moghadam' ),
+					'usage'   => __( 'Gaps between related elements in prose.', 'moghadam' ),
+					'default' => '1rem',
+				),
+				'space-md'    => array(
+					'var'     => '--moghadam-space-md',
+					'label'   => __( 'Space, medium', 'moghadam' ),
+					'usage'   => __( 'Paragraph rhythm.', 'moghadam' ),
+					'default' => '1.5rem',
+				),
+				'space-lg'    => array(
+					'var'     => '--moghadam-space-lg',
+					'label'   => __( 'Space, large', 'moghadam' ),
+					'usage'   => __( 'Space around blocks of prose.', 'moghadam' ),
+					'default' => '2.5rem',
+				),
+				'space-xl'    => array(
+					'var'     => '--moghadam-space-xl',
+					'label'   => __( 'Space, extra large', 'moghadam' ),
+					'usage'   => __( 'Space between major regions on inner pages.', 'moghadam' ),
+					'default' => '4rem',
 				),
 			),
 		),
 		'glass'      => array(
+			'tab'         => 'sticky-header',
 			'label'       => __( 'Sticky Header Glass', 'moghadam' ),
 			'description' => __( 'The floating bar is a lens over the page. Raise the blur and the tint until the bar\'s own labels stay readable over the busiest section; lower them to let more of the page through. Defined twice, once per mode.', 'moghadam' ),
 			'per_mode'    => true,
@@ -149,6 +441,7 @@ function moghadam_variables_schema() {
 			),
 		),
 		'glass_lens' => array(
+			'tab'         => 'sticky-header',
 			'label'       => __( 'Sticky Header Refraction', 'moghadam' ),
 			'description' => __( 'An SVG lens that bends the page behind the bar at its edges. Chromium only, desktop only, and skipped under reduced motion; everywhere else the blur above is used on its own.', 'moghadam' ),
 			'per_mode'    => false,
@@ -167,102 +460,6 @@ function moghadam_variables_schema() {
 					'usage'   => __( 'Blur applied inside the lens before it bends, relative to the bar. Keep it small.', 'moghadam' ),
 					'control' => 'size',
 					'default' => '0.03',
-				),
-			),
-		),
-		'typography' => array(
-			'label'       => __( 'Typography', 'moghadam' ),
-			'description' => __( 'Shared by both modes. Font stacks accept any CSS font-family value; keep a system fallback at the end.', 'moghadam' ),
-			'per_mode'    => false,
-			'control'     => 'text',
-			'tokens'      => array(
-				'font-body'      => array(
-					'var'     => '--moghadam-font-body',
-					'label'   => __( 'Body font', 'moghadam' ),
-					'usage'   => __( 'Everything that is not code.', 'moghadam' ),
-					'default' => 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-				),
-				'font-heading'   => array(
-					'var'     => '--moghadam-font-heading',
-					'label'   => __( 'Heading font', 'moghadam' ),
-					'usage'   => __( 'H1 through H6.', 'moghadam' ),
-					'default' => 'var(--moghadam-font-body)',
-				),
-				'font-mono'      => array(
-					'var'     => '--moghadam-font-mono',
-					'label'   => __( 'Monospace font', 'moghadam' ),
-					'usage'   => __( 'Inline code, code blocks, keyboard input.', 'moghadam' ),
-					'default' => 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
-				),
-				'font-size-base' => array(
-					'var'     => '--moghadam-font-size-base',
-					'label'   => __( 'Base font size', 'moghadam' ),
-					'usage'   => __( 'Root size the whole scale is derived from.', 'moghadam' ),
-					'default' => '1rem',
-					'control' => 'size',
-				),
-				'line-height'    => array(
-					'var'     => '--moghadam-line-height',
-					'label'   => __( 'Line height', 'moghadam' ),
-					'usage'   => __( 'Body copy leading. Unitless.', 'moghadam' ),
-					'default' => '1.7',
-					'control' => 'size',
-				),
-			),
-		),
-		'layout'     => array(
-			'label'       => __( 'Spacing and sizing', 'moghadam' ),
-			'description' => __( 'Shared by both modes. Any CSS length is accepted.', 'moghadam' ),
-			'per_mode'    => false,
-			'control'     => 'size',
-			'tokens'      => array(
-				'space-xs'  => array(
-					'var'     => '--moghadam-space-xs',
-					'label'   => __( 'Space XS', 'moghadam' ),
-					'usage'   => __( 'Table cells, tight gaps, gallery gutters.', 'moghadam' ),
-					'default' => '0.5rem',
-				),
-				'space-sm'  => array(
-					'var'     => '--moghadam-space-sm',
-					'label'   => __( 'Space SM', 'moghadam' ),
-					'usage'   => __( 'Container padding, header padding, heading margins.', 'moghadam' ),
-					'default' => '1rem',
-				),
-				'space-md'  => array(
-					'var'     => '--moghadam-space-md',
-					'label'   => __( 'Space MD', 'moghadam' ),
-					'usage'   => __( 'Paragraph and block spacing, navigation gaps.', 'moghadam' ),
-					'default' => '1.5rem',
-				),
-				'space-lg'  => array(
-					'var'     => '--moghadam-space-lg',
-					'label'   => __( 'Space LG', 'moghadam' ),
-					'usage'   => __( 'Section padding, post separation, widget spacing.', 'moghadam' ),
-					'default' => '2.5rem',
-				),
-				'space-xl'  => array(
-					'var'     => '--moghadam-space-xl',
-					'label'   => __( 'Space XL', 'moghadam' ),
-					'usage'   => __( 'Comments area offset.', 'moghadam' ),
-					'default' => '4rem',
-				),
-				'radius'    => array(
-					'var'     => '--moghadam-radius',
-					'label'   => __( 'Corner radius', 'moghadam' ),
-					'usage'   => __( 'Buttons, inputs, images, code blocks.', 'moghadam' ),
-					'default' => '6px',
-				),
-				'content'   => array(
-					'var'     => '--moghadam-content',
-					'label'   => __( 'Content width', 'moghadam' ),
-					'usage'   => __( 'The reading measure on the default template.', 'moghadam' ),
-					'default' => '800px',
-				),
-				'container' => array(
-					'var'     => '--moghadam-container',
-					'label'   => __( 'Container width', 'moghadam' ),
-					'usage'   => __( 'Outer page width and wide alignments.', 'moghadam' ),
-					'default' => '1100px',
 				),
 			),
 		),
@@ -464,8 +661,12 @@ function moghadam_sanitize_css_size( $value ) {
  * @return array
  */
 function moghadam_sanitize_settings( $input ) {
-	$schema   = moghadam_variables_schema();
-	$defaults = moghadam_variables_defaults();
+	$schema = moghadam_variables_schema();
+
+	// The screen posts one tab at a time, so anything missing from this
+	// request has to fall back to what is already stored rather than to the
+	// factory default, or saving Colors would reset Typography.
+	$defaults = moghadam_get_settings()['variables'];
 	$clean    = array( 'variables' => array() );
 
 	$input = is_array( $input ) ? $input : array();
@@ -560,7 +761,17 @@ function moghadam_build_declarations( $mode ) {
 				continue;
 			}
 
-			$declarations[] = "\t" . $token['var'] . ': ' . $value . ';';
+			// A token can publish under more than one name: the design owns
+			// the short names and the older --moghadam-* names are kept as
+			// aliases so the base stylesheet keeps resolving.
+			$names = array_merge(
+				array( $token['var'] ),
+				isset( $token['alias'] ) ? (array) $token['alias'] : array()
+			);
+
+			foreach ( $names as $name ) {
+				$declarations[] = "\t" . $name . ': ' . $value . ';';
+			}
 		}
 	}
 
@@ -581,7 +792,11 @@ function moghadam_variables_css() {
 	$light = moghadam_build_declarations( 'light' );
 	$dark  = moghadam_build_declarations( 'dark' );
 
-	$css  = ":root {\n" . $light . "\n}\n";
+	// :root:root, not :root. design.css declares the same tokens so the design
+	// still holds if this stylesheet is dequeued (the Canvas template does
+	// exactly that), and it loads afterwards, so the stored values need the
+	// extra specificity to win.
+	$css  = ":root:root {\n" . $light . "\n}\n";
 	$nested_dark = "\t" . str_replace( "\n", "\n\t", $dark );
 
 	$css .= "\n@media (prefers-color-scheme: dark) {\n\t:root:not([data-theme=\"light\"]) {\n" . $nested_dark . "\n\t}\n}\n";
@@ -633,6 +848,11 @@ function moghadam_filter_theme_json( $theme_json ) {
 	}
 
 	foreach ( $schema['colors']['tokens'] as $token_key => $token ) {
+		// Tokens that carry an alpha or a shadow are not palette entries.
+		if ( isset( $token['palette'] ) && false === $token['palette'] ) {
+			continue;
+		}
+
 		$palette[] = array(
 			'slug'  => $token_key,
 			'name'  => $token['label'],

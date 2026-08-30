@@ -32,12 +32,41 @@ function moghadam_settings_capability() {
  * @return array Tab slug => array with 'label' and 'callback' keys.
  */
 function moghadam_settings_tabs() {
-	$tabs = array(
-		'variables' => array(
-			'label'    => __( 'Variables', 'moghadam' ),
-			'callback' => 'moghadam_render_variables_tab',
-		),
+	$labels = array(
+		'colors'        => __( 'Colors', 'moghadam' ),
+		'typography'    => __( 'Typography', 'moghadam' ),
+		'spacing'       => __( 'Spacing & Sizing', 'moghadam' ),
+		'sticky-header' => __( 'Sticky Header', 'moghadam' ),
 	);
+
+	// One tab per group of tokens, in the order the labels are listed above.
+	// A group that names a tab nobody declared still gets one, so a filtered
+	// schema cannot hide its own fields.
+	$tabs = array();
+
+	foreach ( moghadam_variables_schema() as $group ) {
+		$tab = isset( $group['tab'] ) ? $group['tab'] : 'colors';
+
+		if ( isset( $tabs[ $tab ] ) ) {
+			continue;
+		}
+
+		$tabs[ $tab ] = array(
+			'label'    => isset( $labels[ $tab ] ) ? $labels[ $tab ] : ucfirst( str_replace( '-', ' ', $tab ) ),
+			'callback' => 'moghadam_render_variables_tab',
+		);
+	}
+
+	$ordered = array();
+
+	foreach ( array_keys( $labels ) as $slug ) {
+		if ( isset( $tabs[ $slug ] ) ) {
+			$ordered[ $slug ] = $tabs[ $slug ];
+			unset( $tabs[ $slug ] );
+		}
+	}
+
+	$tabs = $ordered + $tabs;
 
 	/**
 	 * Filters the settings tabs.
@@ -224,8 +253,14 @@ function moghadam_render_settings_page() {
  */
 function moghadam_render_variables_tab() {
 	$variables = moghadam_get_settings()['variables'];
+	$current   = moghadam_current_tab();
 
 	foreach ( moghadam_variables_schema() as $group_key => $group ) {
+		$tab = isset( $group['tab'] ) ? $group['tab'] : 'colors';
+
+		if ( $tab !== $current ) {
+			continue;
+		}
 		?>
 		<h2 class="moghadam-group-title"><?php echo esc_html( $group['label'] ); ?></h2>
 		<?php if ( ! empty( $group['description'] ) ) : ?>

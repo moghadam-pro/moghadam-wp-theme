@@ -814,7 +814,7 @@ a.link-accent:hover { color: var(--yellow); }
 
 /* ---------- 17. Responsive ---------- */
 @media (max-width: 1279px) {
-  :root { --section-pad: 96px; --fs-display: 42px; --fs-h2: 32px; --fs-h3: 34px; --fs-case: 28px; }
+  :root:root { --section-pad: 96px; --fs-display: 42px; --fs-h2: 32px; --fs-h3: 34px; --fs-case: 28px; }
   .about__body { grid-template-columns: 1fr 300px; gap: 48px; }
   .about__bio { padding-top: 40px; }
   .cases__intro { grid-template-columns: 1.35fr 1fr; }
@@ -826,7 +826,7 @@ a.link-accent:hover { color: var(--yellow); }
 }
 
 @media (max-width: 1023px) {
-  :root { --section-pad: 80px; --fs-display: 36px; --fs-h2: 28px; --fs-h3: 28px; --fs-case: 24px; --fs-lead: 20px; }
+  :root:root { --section-pad: 80px; --fs-display: 36px; --fs-h2: 28px; --fs-h3: 28px; --fs-case: 24px; --fs-lead: 20px; }
   .footer__extra { right: auto; left: 0; }
   .header { padding-block: 20px; }
   .header .nav, .header .status, .header .clock { display: none; }
@@ -887,7 +887,7 @@ a.link-accent:hover { color: var(--yellow); }
   }
   .footer__extra a { padding: 15px 16px; font-size: 15px; line-height: 20px; }
 
-  :root { --fs-display: 30px; --fs-h2: 24px; --fs-h3: 24px; --fs-case: 22px; --gutter: 20px; --section-pad: 64px; }
+  :root:root { --fs-display: 30px; --fs-h2: 24px; --fs-h3: 24px; --fs-case: 22px; --gutter: 20px; --section-pad: 64px; }
   .hero__body { padding-top: 110px; }
   /* the terminal is a desktop-only flourish */
   .terminal { display: none; }
